@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق صدقة جارية | Sadaqa</title>
+    <meta name="theme-color" content="#1E6F5C">
+    <meta name="description" content="تطبيق صدقة جارية لقراءة الأذكار، القرآن الكريم، والدعاء للمتوفى. نسألكم الدعاء.">
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical" href="https://yosef243.github.io/Saber/" />
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-48LGD8FVRY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-48LGD8FVRY');
+    </script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5661854146208967" crossorigin="anonymous"></script>
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yosef243.github.io/Saber/">
+    <meta property="og:title" content="تطبيق صدقة جارية | Sadaqa">
+    <meta property="og:description" content="شارك في الأجر واقرأ القرآن والأذكار، أو أنشئ تطبيق صدقة جارية لمن تحب مجاناً.">
+    <meta property="og:image" content="https://yosef243.github.io/Saber/icons/Preview.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="تطبيق صدقة جارية | Sadaqa">
+    <meta name="twitter:description" content="شارك في الأجر واقرأ القرآن والأذكار، أو أنشئ تطبيق صدقة جارية لمن تحب مجاناً.">
+    <meta name="twitter:image" content="https://yosef243.github.io/Saber/icons/Preview.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="top-bar">
+            <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">EN</button>
+            <div class="theme-palette">
+                <div class="color-dot active" style="background-color: rgb(30, 111, 92);" onclick="setTheme('default', this)"></div>
+                <div class="color-dot" style="background-color: rgb(29, 53, 87);" onclick="setTheme('blue', this)"></div>
+                <div class="color-dot" style="background-color: rgb(111, 78, 55);" onclick="setTheme('brown', this)"></div>
+                <div class="color-dot" style="background-color: rgb(17, 24, 39);" onclick="setTheme('dark', this)"></div>
+            </div>
+            <button class="icon-btn" onclick="shareCurrentPage()">📤</button>
+        </div>
+
+        <h1 class="deceased-name">المرحوم صبري كامل سليم</h1>
+        <div class="deceased-prayer" data-i18n="header_dua">اللهم اغفر له وارحمه وعافه واعف عنه وأكرم نزله ووسع مدخله</div>
+    </header>
+
+    <div class="tabs-scroll-container" role="tablist" aria-label="التنقل بين أقسام التطبيق">
+        <button id="tab-counter" class="tab-btn active" role="tab" aria-selected="true" aria-controls="counter" tabindex="0" onclick="switchTab('counter', this)">📿 <span data-i18n="tab_tasbeeh">المسبحة</span></button>
+        <button id="tab-azkar" class="tab-btn" role="tab" aria-selected="false" aria-controls="azkar" tabindex="-1" onclick="switchTab('azkar', this)">☀️ <span data-i18n="tab_azkar">الأذكار</span></button>
+        <button id="tab-tracker" class="tab-btn" role="tab" aria-selected="false" aria-controls="tracker" tabindex="-1" onclick="switchTab('tracker', this)">📊 <span data-i18n="tab_tracker">الورد اليومي</span></button>
+        <button id="tab-duas" class="tab-btn" role="tab" aria-selected="false" aria-controls="duas" tabindex="-1" onclick="switchTab('duas', this)">🤲 <span data-i18n="tab_duas">الأدعية</span></button>
+        <button id="tab-quran" class="tab-btn" role="tab" aria-selected="false" aria-controls="quran" tabindex="-1" onclick="switchTab('quran', this)">📖 <span data-i18n="tab_quran">القرآن</span></button>
+        <button id="tab-names" class="tab-btn" role="tab" aria-selected="false" aria-controls="names" tabindex="-1" onclick="switchTab('names', this)">✨ <span data-i18n="tab_names">الأسماء</span></button>
+        <button id="tab-stories" class="tab-btn" role="tab" aria-selected="false" aria-controls="stories" tabindex="-1" onclick="switchTab('stories', this)">💡 <span data-i18n="tab_stories">قصص</span></button>
+    </div>
+
+    <main>
+        <div id="counter" class="tab-content active card" role="tabpanel" aria-labelledby="tab-counter" aria-hidden="false">
+            <div class="dhikr-display" id="dhikrText">سبحان الله</div>
+            <div class="counter-container" onclick="incrementCounter()">
+                <div class="counter-circle">
+                    <span class="count-num" id="totalCounter">0</span>
+                    <span style="font-size: 1.2rem; margin-top: 10px; opacity: 0.9;" id="batchCounter" dir="ltr">0 / 33</span>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="copy-btn" style="margin: 0 auto; padding: 10px 25px;" onclick="confirmReset()">
+                    <span style="font-size: 1.2rem;">🔄</span> <span data-i18n="btn_reset">تصفير العداد</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="azkar" class="tab-content card" role="tabpanel" aria-labelledby="tab-azkar" aria-hidden="true">
+            <div class="azkar-toggle">
+                <button class="azkar-opt active" onclick="toggleAzkar('morning', this)" data-i18n="azkar_morning">الصباح</button>
+                <button class="azkar-opt" onclick="toggleAzkar('evening', this)" data-i18n="azkar_evening">المساء</button>
+                <button class="azkar-opt" onclick="toggleAzkar('sleep', this)" data-i18n="azkar_sleep">النوم</button>
+            </div>
+            <div id="azkarList" style="display: flex; flex-direction: column; gap: 15px;"></div>
+        </div>
+
+        <div id="tracker" class="tab-content card" role="tabpanel" aria-labelledby="tab-tracker" aria-hidden="true">
+            <h2 style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:800;" data-i18n="title_tracker">الورد اليومي</h2>
+            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:15px;" data-i18n="desc_tracker">قليل دائم خير من كثير منقطع</p>
+            <div id="trackerList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+
+        <div id="duas" class="tab-content card" role="tabpanel" aria-labelledby="tab-duas" aria-hidden="true">
+            <div class="azkar-toggle" style="margin-bottom: 20px;">
+                <button class="azkar-opt active" onclick="toggleDuaCategory('deceased', this)" data-i18n="dua_deceased">للمتوفى</button>
+                <button class="azkar-opt" onclick="toggleDuaCategory('general', this)" data-i18n="dua_general">أدعية عامة</button>
+            </div>
+            <div id="duasList" style="display: flex; flex-direction: column; gap: 15px; max-height: 55vh; overflow-y: auto; padding-right: 5px;"></div>
+        </div>
+
+        <div id="quran" class="tab-content card" role="tabpanel" aria-labelledby="tab-quran" aria-hidden="true">
+            <a href="https://quran.com" target="_blank" rel="noopener noreferrer" class="surah-link">
+                <span style="display: flex; align-items: center; gap: 10px;">📖 <span data-i18n="quran_full">المصحف كاملاً</span></span>
+                <span style="color: var(--primary);">❯</span>
+            </a>
+            <a href="https://quran.com/36" target="_blank" rel="noopener noreferrer" class="surah-link">
+                <span style="display: flex; align-items: center; gap: 10px;">📜 <span data-i18n="quran_yaseen">سورة يس</span></span>
+                <span style="color: var(--primary);">❯</span>
+            </a>
+            <a href="https://quran.com/67" target="_blank" rel="noopener noreferrer" class="surah-link">
+                <span style="display: flex; align-items: center; gap: 10px;">📜 <span data-i18n="quran_mulk">سورة الملك</span></span>
+                <span style="color: var(--primary);">❯</span>
+            </a>
+            <a href="https://quran.com/18" target="_blank" rel="noopener noreferrer" class="surah-link">
+                <span style="display: flex; align-items: center; gap: 10px;">📜 <span data-i18n="quran_kahf">سورة الكهف</span></span>
+                <span style="color: var(--primary);">❯</span>
+            </a>
+        </div>
+
+        <div id="names" class="tab-content card" role="tabpanel" aria-labelledby="tab-names" aria-hidden="true">
+            <h2 style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:800;" data-i18n="title_names">أسماء الله الحسنى</h2>
+            <div id="namesGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"></div>
+        </div>
+
+        <div id="stories" class="tab-content card" role="tabpanel" aria-labelledby="tab-stories" aria-hidden="true">
+            <h2 style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:800;" data-i18n="title_stories">قصص وعبر</h2>
+            <div id="storiesList" style="display: flex; flex-direction: column; gap: 15px;"></div>
+        </div>
+
+        <div class="sadaqa-card">
+            <h3 style="margin-bottom: 10px; font-size: 1.4rem;" data-i18n="sadaqa_title">✨ صدقة جارية لمن تحب</h3>
+            <p style="font-size: 0.95rem; margin-bottom: 15px; opacity: 0.9;" data-i18n="sadaqa_desc">أنشئ نسخة من هذا التطبيق باسم من تحب من الأموات ليكون صدقة جارية لروحهم.</p>
+            <button class="sadaqa-btn" onclick="openModal()" data-i18n="btn_create_sadaqa">أنشئ صدقة جارية الآن</button>
+        </div>
+
+        <div class="ad-container">
+            <div class="ad-box" style="border: none; background: transparent; height: auto;">
+                <span style="font-size: 0.75rem; margin-bottom: 5px; opacity: 0.7; display: block; text-align: center;" data-i18n="ad_space">مساحة إعلانية (تظهر هنا بعد موافقة أدسنس)</span>
+                <ins class="adsbygoogle"
+                     style="display:block; min-height:120px"
+                     data-ad-client="ca-pub-5661854146208967"
+                     data-ad-slot="1234567890"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+                </script>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>صدقة جارية | <span class="deceased-name" style="font-size: 1rem; color:inherit; text-shadow: none;">المرحوم صبري كامل سليم</span></p>
+        <p style="margin-top: 5px; opacity: 0.7; font-size: 0.8rem; font-weight: bold;" data-i18n="footer_dev">Developed by Yousef Sabry</p>
+    </footer>
+
+    <div class="modal-overlay" id="sadaqaModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">×</span>
+
+            <div id="step1">
+                <h3 style="color: var(--primary); margin-bottom: 15px;" data-i18n="modal_title1">أنشئ صدقة جارية</h3>
+                <p style="font-size: 0.9rem; color: var(--text-sub); margin-bottom: 15px;" data-i18n="modal_desc1">اكتب اسم المتوفى ليتم إنشاء رابط مخصص باسمه:</p>
+
+                <div style="display: flex; gap: 20px; margin-bottom: 15px; justify-content: center; font-size: 1.1rem;">
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                        <input type="radio" name="gender" value="m" checked> 👨 ذكر
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                        <input type="radio" name="gender" value="f"> 🧕 أنثى
+                    </label>
+                </div>
+
+                <input type="text" id="deceasedNameInput" class="modal-input" placeholder="مثال: أحمد محمود" />
+                <button class="sadaqa-btn" style="width: 100%; margin-top: 5px;" onclick="generateSadaqaLink()" data-i18n="btn_generate">توليد الرابط</button>
+            </div>
+
+            <div id="step2" style="display: none;">
+                <h3 style="color: var(--primary); margin-bottom: 15px;" data-i18n="modal_title2">تم الإنشاء بنجاح! 🎉</h3>
+                <p style="font-size: 0.9rem; color: var(--text-sub); margin-bottom: 15px;" data-i18n="modal_desc2">هذا هو الرابط المخصص، انسخه وشاركه مع عائلتك وأصدقائك:</p>
+                <input type="text" id="generatedLinkUrl" class="modal-input" readonly />
+                <div class="modal-actions">
+                    <button class="btn-outline" onclick="copyLinkAction()" data-i18n="btn_copy_link">📋 نسخ الرابط</button>
+                    <button class="btn-main" onclick="openLinkAction()" data-i18n="btn_open_link">فتح الرابط ❯</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script defer src="data/azkar.js"></script>
+    <script defer src="data/duas.js"></script>
+    <script defer src="data/tasks.js"></script>
+    <script defer src="data/stories.js"></script>
+    <script defer src="data/names.js"></script>
+
+    <script defer src="js/core.js"></script>
+    <script defer src="js/ui.js"></script>
+    <script defer src="js/pwa.js"></script>
+</body>
+</html>

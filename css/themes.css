@@ -1,0 +1,76 @@
+/* ==========================================
+   ملف themes.css (لوحات الألوان) - النسخة المحسّنة
+========================================== */
+
+/* (P0) Hint للمتصفح: يحسن ألوان عناصر النظام تلقائياً */
+:root {
+  color-scheme: light;
+
+  /* 1. الوضع الافتراضي (الأخضر المريح) */
+  --primary: #1E6F5C;
+  --secondary: #E8F6EF;
+  --bg-color: #F4F9F4;
+  --card-bg: #FFFFFF;
+  --text-main: #2C3E50;
+  --text-sub: #596275;
+  --border: #E1E8E4;
+
+  /* (P1) Tokens إضافية (اختيارية) لاحترافية أعلى */
+  --shadow-sm: 0 2px 5px rgba(0,0,0,0.05);
+  --shadow-md: 0 8px 25px rgba(0,0,0,0.06);
+  --ring: color-mix(in srgb, var(--primary) 65%, transparent);
+}
+
+/* 2. الوضع الأزرق (هادئ وروحاني) */
+[data-theme="blue"] {
+  color-scheme: light;
+
+  --primary: #1D3557;
+  --secondary: #F1FAEE;
+  --bg-color: #E2EAFC;
+  --card-bg: #FFFFFF;
+
+  /* (P1) تحسين بسيط لراحة القراءة: نقرّب النص للأغمق المتوازن */
+  --text-main: #0B2D5C;  /* كان #023E8A (حادّ شوية على بعض الشاشات) */
+  --text-sub: #457B9D;
+  --border: #A8DADC;
+
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.05);
+  --shadow-md: 0 10px 28px rgba(0,0,0,0.07);
+  --ring: color-mix(in srgb, var(--primary) 65%, transparent);
+}
+
+/* 3. الوضع البني (كلاسيكي مثل المصحف) */
+[data-theme="brown"] {
+  color-scheme: light;
+
+  --primary: #6F4E37;
+  --secondary: #FDF6E3;
+  --bg-color: #F4EBD0;
+  --card-bg: #FFFFFF;
+  --text-main: #3E2723;
+  --text-sub: #5D4037;
+  --border: #D7CCC8;
+
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.06);
+  --shadow-md: 0 10px 30px rgba(0,0,0,0.08);
+  --ring: color-mix(in srgb, var(--primary) 65%, transparent);
+}
+
+/* 4. الوضع المظلم (تباين محسّن + دعم color-scheme) */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --primary: #10B981;   /* أخضر ساطع ليظهر بوضوح */
+  --secondary: #374151; /* بطاقات داخلية */
+  --bg-color: #111827;  /* خلفية */
+  --card-bg: #1F2937;   /* بطاقات رئيسية */
+  --text-main: #F3F4F6; /* نص أساسي */
+  --text-sub: #9CA3AF;  /* نص فرعي */
+  --border: #374151;
+
+  /* (P1) ظلال مناسبة للداكن (أقل blur وبدون “وساخة”) */
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.35);
+  --shadow-md: 0 10px 28px rgba(0,0,0,0.45);
+  --ring: color-mix(in srgb, var(--primary) 70%, transparent);
+}
