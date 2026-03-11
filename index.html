@@ -1,211 +1,880 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق صدقة جارية | Sadaqa</title>
-    <meta name="theme-color" content="#1E6F5C">
-    <meta name="description" content="تطبيق صدقة جارية لقراءة الأذكار، القرآن الكريم، والدعاء للمتوفى. نسألكم الدعاء.">
-    <meta name="robots" content="index, follow">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#125B50" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="application-name" content="أذكار المسلم" />
+  <title>أذكار المسلم | Azkar</title>
 
-    <link rel="canonical" href="https://yosef243.github.io/Saber/" />
+  <link rel="manifest" href="manifest.json" />
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-48LGD8FVRY"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-48LGD8FVRY');
-    </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5661854146208967" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/modules.css" />
 
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yosef243.github.io/Saber/">
-    <meta property="og:title" content="تطبيق صدقة جارية | Sadaqa">
-    <meta property="og:description" content="شارك في الأجر واقرأ القرآن والأذكار، أو أنشئ تطبيق صدقة جارية لمن تحب مجاناً.">
-    <meta property="og:image" content="https://yosef243.github.io/Saber/icons/Preview.png">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="تطبيق صدقة جارية | Sadaqa">
-    <meta name="twitter:description" content="شارك في الأجر واقرأ القرآن والأذكار، أو أنشئ تطبيق صدقة جارية لمن تحب مجاناً.">
-    <meta name="twitter:image" content="https://yosef243.github.io/Saber/icons/Preview.png">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/themes.css">
-    <link rel="stylesheet" href="css/main.css">
-
-    <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-    <header>
-        <div class="top-bar">
-            <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">EN</button>
-            <div class="theme-palette">
-                <div class="color-dot active" style="background-color: rgb(30, 111, 92);" onclick="setTheme('default', this)"></div>
-                <div class="color-dot" style="background-color: rgb(29, 53, 87);" onclick="setTheme('blue', this)"></div>
-                <div class="color-dot" style="background-color: rgb(111, 78, 55);" onclick="setTheme('brown', this)"></div>
-                <div class="color-dot" style="background-color: rgb(17, 24, 39);" onclick="setTheme('dark', this)"></div>
+  <!-- ===== BANNERS ===== -->
+  <div id="offlineBanner" hidden class="banner banner--warning" role="alert">
+    <i class="fa-solid fa-wifi" aria-hidden="true"></i>
+    <span>أنت الآن تعمل بدون إنترنت</span>
+  </div>
+  <div id="updateAvailableBanner" hidden class="banner banner--info" role="alert">
+    <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+    <span>يوجد تحديث جديد للتطبيق</span>
+    <button class="btn btn--small" id="applyUpdateBtn">تحديث الآن</button>
+  </div>
+
+  <header class="header no-select">
+    <button
+      id="backBtn"
+      type="button"
+      class="icon-btn icon-btn--transparent is-hidden"
+      aria-label="الرجوع"
+      title="الرجوع"
+    >
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </button>
+
+    <h1 class="header__title" id="headerTitle">أذكار المسلم</h1>
+
+    <button
+      type="button"
+      class="icon-btn icon-btn--transparent"
+      data-nav-section="settingsPage"
+      data-nav-title="حسابي"
+      aria-label="فتح صفحة الإعدادات والحساب"
+      title="الحساب"
+    >
+      <i class="fa-solid fa-user" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <main id="mainContent">
+    <div class="page">
+
+      <section id="home" class="tab-content active" role="tabpanel" aria-hidden="false">
+        <article class="cardx cardx--hero">
+          <h2 class="cardx__title"><i class="fa-solid fa-book-open" aria-hidden="true"></i> آية اليوم</h2>
+          <p id="dailyAyahText" class="amiri-text" aria-live="polite">جاري التحميل...</p>
+          <i class="fa-solid fa-quote-left" aria-hidden="true"></i>
+        </article>
+
+        <article class="cardx cardx--message">
+          <h2 class="cardx__title"><i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i> رسالة لك</h2>
+          <p id="dailyMessageText" class="amiri-text" aria-live="polite">جاري التحميل...</p>
+        </article>
+
+        <h3 class="muted mb-12 text-strong">أقسام التطبيق</h3>
+
+        <nav id="homeSectionsGrid" class="home-grid home-grid--main no-select" aria-label="أقسام التطبيق الرئيسية">
+          
+          <button type="button" class="home-btn" data-nav-section="wird" data-nav-title="ورد الذكر">
+            <div class="home-icon-box"><i class="fa-solid fa-fingerprint" aria-hidden="true"></i></div>
+            <span class="home-btn-text">المسبحة والأذكار</span>
+          </button>
+
+          <button type="button" class="home-btn" data-nav-section="duas" data-nav-title="الأدعية الجامعة">
+            <div class="home-icon-box"><i class="fa-solid fa-hands-praying" aria-hidden="true"></i></div>
+            <span class="home-btn-text">الأدعية الجامعة</span>
+          </button>
+
+          <button type="button" class="home-btn" data-nav-section="quran" data-nav-title="القرآن الكريم">
+            <div class="home-icon-box"><i class="fa-solid fa-book-quran" aria-hidden="true"></i></div>
+            <span class="home-btn-text">القرآن الكريم</span>
+          </button>
+
+          <button type="button" class="home-btn" data-nav-section="tasks" data-nav-title="المهام والإحصائيات">
+            <div class="home-icon-box"><i class="fa-solid fa-chart-line" aria-hidden="true"></i></div>
+            <span class="home-btn-text">المهام والمتابعة</span>
+          </button>
+
+          <button type="button" class="home-btn" data-nav-section="names" data-nav-title="أسماء الله الحسنى">
+            <div class="home-icon-box"><i class="fa-solid fa-star-and-crescent" aria-hidden="true"></i></div>
+            <span class="home-btn-text">أسماء الله</span>
+          </button>
+
+          <button type="button" class="home-btn" data-nav-section="stories" data-nav-title="قصص وعبر">
+            <div class="home-icon-box"><i class="fa-solid fa-book-journal-whills" aria-hidden="true"></i></div>
+            <span class="home-btn-text">قصص وعبر</span>
+          </button>
+        </nav>
+        
+
+      
+<section id="dailyStatsMini" class="stats-mini cardx">
+
+<div class="stats-mini-item">
+<span id="miniTasbeeh" aria-live="polite">0</span>
+<p>تسابيح اليوم</p>
+</div>
+
+<div class="stats-mini-item">
+<span id="miniTasks" aria-live="polite">0/0</span>
+<p>المهام</p>
+</div>
+
+<div class="stats-mini-item">
+<span id="miniProgress" aria-live="polite">0%</span>
+<p>الإنجاز</p>
+</div>
+
+<div class="stats-mini-item">
+<span id="miniStreak" aria-live="polite">0</span>
+<p>أيام الالتزام</p>
+</div>
+
+</section>
+
+<!-- ===== مساحة إعلانية للصفحة الرئيسية ===== -->
+<!-- لاحظ أن محتوى هذا الحاوية يتم حقنه ديناميكياً عبر adsManager
+     استناداً إلى ملف js/ads-config.js. لا تضع هنا أي شيفرة إعلانية ثابتة. -->
+<div id="homeAdSlot" class="ad-slot"></div>
+
+</section>
+<!-- نهاية القسم الأول (home) -->
+      <section id="wird" class="tab-content" role="tabpanel" aria-hidden="true">
+        <div id="wirdMainView">
+          <div class="cardx cardx--center">
+            <div class="flex-between">
+              <div class="input-group">
+                <label for="masbahaTargetInput" class="muted text-strong">تغيير الذكر كل:</label>
+                <input
+                  type="number"
+                  id="masbahaTargetInput"
+                  value="33"
+                  class="input text-center p-0"
+                  style="width: 60px; border: none; background: transparent; font-weight: 900; color: var(--primary);"
+                  data-masbaha-action="update-target"
+                  aria-label="عدد مرات الذكر قبل الانتقال للذكر التالي"
+                >
+              </div>
+
+              <button
+                type="button"
+                class="icon-btn icon-btn--transparent"
+                id="masbahaSilentToggle"
+                data-masbaha-action="toggle-silent"
+                aria-label="تبديل الصوت"
+                title="تبديل الصوت"
+                aria-pressed="false"
+              >
+                <i id="silentIcon" class="fa-solid fa-volume-high" aria-hidden="true"></i>
+              </button>
             </div>
-            <button class="icon-btn" onclick="shareCurrentPage()">📤</button>
+            <!-- تسمية حالة الصوت -->
+            <span id="masbahaSilentToggleLabel" class="sr-only">صوت</span>
+
+            <div
+              id="generalZekrDisplay"
+              class="amiri-text mt-15"
+              style="font-size: 1.8rem; font-weight: bold; color: var(--primary); min-height: 40px;"
+              aria-live="polite"
+            >
+              سبحان الله
+            </div>
+
+            <button
+              type="button"
+              class="btn masbaha-btn"
+              data-masbaha-action="increment"
+              aria-label="زيادة عداد المسبحة"
+            >
+              <!-- العناصر الأساسية للمسبحة -->
+              <span id="totalCounter" aria-live="polite" style="font-size: 4rem; font-weight: 900; color: var(--primary); line-height: 1;">0</span>
+              <span
+                id="batchCounter"
+                class="muted mt-15 rounded-md bg-soft"
+                style="font-weight: bold; padding: 4px 15px;"
+                aria-live="polite"
+              >
+                0 / 33
+              </span>
+              <!-- عناصر إضافية للتوافق مع masbaha.js -->
+              <span id="masbahaCounter" style="display: none;">0</span>
+              <span id="masbahaBatch" style="display: none;">0 / 33</span>
+              <span id="masbahaCurrentZekr" style="display: none;">سبحان الله</span>
+            </button>
+
+            <!-- قيمة الهدف الحالي (للقراءة فقط) -->
+            <div class="mt-15 muted">
+              الهدف الحالي: <span id="masbahaTargetValue">33</span>
+            </div>
+
+            <!-- شريط تقدم المسبحة -->
+            <div class="progress-track mt-15" style="width: 100%;">
+              <div id="masbahaProgressBar" class="progress-fill" style="width:0%"></div>
+            </div>
+
+            <div class="flex-gap mt-25">
+              <button type="button" class="btn" data-masbaha-action="reset"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> تصفير</button>
+              <button type="button" class="btn btn--primary" data-masbaha-action="open-custom-modal"><i class="fa-solid fa-pen" aria-hidden="true"></i> أذكاري المخصصة</button>
+            </div>
+          </div>
+
+          <div class="cardx">
+            <h3 class="cardx__title"><i class="fa-solid fa-book-open" aria-hidden="true"></i> الأذكار الشاملة</h3>
+            <div id="azkarCategoriesGrid" class="home-grid home-grid--catalog" aria-live="polite">
+              <p class="muted cardx--center" style="grid-column: span 2;">جاري تحميل الأذكار...</p>
+            </div>
+          </div>
         </div>
 
-        <h1 class="deceased-name">المرحوم صبري كامل سليم</h1>
-        <div class="deceased-prayer" data-i18n="header_dua">اللهم اغفر له وارحمه وعافه واعف عنه وأكرم نزله ووسع مدخله</div>
-    </header>
+        <!-- ===== إعلان قسم المسبحة ===== -->
+        <div id="wirdAdSlot" class="ad-slot ad-slot--compact" hidden aria-label="مساحة إعلانية"></div>
 
-    <div class="tabs-scroll-container" role="tablist" aria-label="التنقل بين أقسام التطبيق">
-        <button id="tab-counter" class="tab-btn active" role="tab" aria-selected="true" aria-controls="counter" tabindex="0" onclick="switchTab('counter', this)">📿 <span data-i18n="tab_tasbeeh">المسبحة</span></button>
-        <button id="tab-azkar" class="tab-btn" role="tab" aria-selected="false" aria-controls="azkar" tabindex="-1" onclick="switchTab('azkar', this)">☀️ <span data-i18n="tab_azkar">الأذكار</span></button>
-        <button id="tab-tracker" class="tab-btn" role="tab" aria-selected="false" aria-controls="tracker" tabindex="-1" onclick="switchTab('tracker', this)">📊 <span data-i18n="tab_tracker">الورد اليومي</span></button>
-        <button id="tab-duas" class="tab-btn" role="tab" aria-selected="false" aria-controls="duas" tabindex="-1" onclick="switchTab('duas', this)">🤲 <span data-i18n="tab_duas">الأدعية</span></button>
-        <button id="tab-quran" class="tab-btn" role="tab" aria-selected="false" aria-controls="quran" tabindex="-1" onclick="switchTab('quran', this)">📖 <span data-i18n="tab_quran">القرآن</span></button>
-        <button id="tab-names" class="tab-btn" role="tab" aria-selected="false" aria-controls="names" tabindex="-1" onclick="switchTab('names', this)">✨ <span data-i18n="tab_names">الأسماء</span></button>
-        <button id="tab-stories" class="tab-btn" role="tab" aria-selected="false" aria-controls="stories" tabindex="-1" onclick="switchTab('stories', this)">💡 <span data-i18n="tab_stories">قصص</span></button>
+        <div id="wirdListView" class="cardx is-hidden">
+          <button type="button" class="btn mb-20" data-masbaha-action="close-category">
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> العودة
+          </button>
+
+          <div class="cardx--center mb-20">
+            <h2 id="azkarListTitle" class="amiri-text cardx__title justify-center mb-8" style="font-size: 2rem;" aria-live="polite"></h2>
+            <div class="section-accent-line"></div>
+          </div>
+
+          <div id="wirdAzkarList" style="display: flex; flex-direction: column; gap: 15px;" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section id="duas" class="tab-content" role="tabpanel" aria-hidden="true">
+        <div id="duasList" aria-live="polite"></div>
+        <!-- ===== إعلان قسم الأدعية ===== -->
+        <div id="duasAdSlot" class="ad-slot" hidden aria-label="مساحة إعلانية"></div>
+      </section>
+
+      <section id="quran" class="tab-content" role="tabpanel" aria-hidden="true">
+        <div class="cardx">
+          <div id="resumeReadingCard" class="cardx--center is-hidden mb-15">
+            <button type="button" class="btn btn--primary" data-quran-action="resume-reading">
+              <i class="fa-solid fa-bookmark" aria-hidden="true"></i> أكمل: <span id="lastReadSurahName"></span>
+            </button>
+          </div>
+
+          <div id="surahListContainer">
+            <div class="mb-15">
+              <label for="searchSurah" class="muted mb-8" style="display:block;">ابحث عن سورة</label>
+              <input
+                type="text"
+                id="searchSurah"
+                class="input"
+                placeholder="ابحث عن سورة..."
+                aria-label="البحث عن سورة"
+              />
+            </div>
+
+            <div id="surahList" class="home-grid home-grid--catalog home-grid--surahs" aria-live="polite">
+              <p class="muted cardx--center" style="grid-column: span 2;">جاري التحميل...</p>
+            </div>
+          </div>
+
+          <div id="surahReader" class="is-hidden">
+            <button type="button" class="btn mb-15" data-quran-action="close-surah">
+              <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> الفهرس
+            </button>
+
+            <h3
+              id="currentSurahTitle"
+              class="amiri-text cardx--center cardx__title justify-center mt-15 mb-15"
+              style="font-size: 2.2rem;"
+              aria-live="polite"
+            ></h3>
+
+            <div
+              id="ayahsContainer"
+              class="amiri-text"
+              style="font-size: 1.6rem; line-height: 2.2; text-align: justify; direction: rtl;"
+            ></div>
+          </div>
+          <!-- ===== إعلان أسفل قسم القرآن ===== -->
+          <div id="quranBottomAdSlot" class="ad-slot ad-slot--compact" hidden aria-label="مساحة إعلانية صغيرة"></div>
+        </div>
+      </section>
+<!-- نهاية الجزء الثاني (wird, duas, quran) -->
+    <section id="tasks" class="tab-content" role="tabpanel" aria-hidden="true">
+      <div class="tasks-tabs mb-15">
+        <button
+          type="button"
+          id="tasksTabBtn"
+          class="tasks-tab active"
+          data-tasks-action="switch-tab"
+          data-tasks-tab="tasks"
+          aria-controls="tasksView"
+        >
+          المهام
+        </button>
+
+        <button
+          type="button"
+          id="statsTabBtn"
+          class="tasks-tab"
+          data-tasks-action="switch-tab"
+          data-tasks-tab="stats"
+          aria-controls="statsView"
+        >
+          الإحصائيات
+        </button>
+      </div>
+
+      <div id="tasksView">
+        <div class="cardx cardx--center mb-15">
+          <div id="tasksBadgeText" class="mb-8 text-strong color-accent" aria-live="polite">🌱 بداية طيبة</div>
+          <div id="tasksMotivationText" class="muted text-strong" aria-live="polite">ابدأ بأول مهمة اليوم ✨</div>
+        </div>
+
+        <div class="cardx">
+          <div class="flex-between mb-15">
+            <h2 class="cardx__title mb-0">
+              <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+              ورد المهام
+            </h2>
+
+            <button type="button" class="btn btn--ghost btn--compact" data-tasks-action="restore-defaults">
+              <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+              استعادة الافتراضي
+            </button>
+          </div>
+
+          <div class="flex-gap mb-15">
+            <input
+              type="text"
+              id="newTaskInput"
+              class="input"
+              placeholder="أضف مهمة..."
+              data-tasks-enter-add="true"
+              aria-label="إضافة مهمة جديدة"
+            />
+            <button type="button" class="btn btn--accent" style="width: 55px;" data-tasks-action="add-task" aria-label="إضافة المهمة">
+              <i class="fa-solid fa-plus" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <!-- empty state للمهام -->
+          <div id="tasksEmptyState" hidden class="muted cardx--center" style="margin: 10px 0;">لا توجد مهام حالياً</div>
+
+          <div id="tasksList" style="display: flex; flex-direction: column; gap: 10px;" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div id="statsView" class="is-hidden">
+        <!-- empty state للإحصائيات -->
+        <div id="statsEmptyState" hidden class="muted cardx--center" style="margin: 10px 0;">لا توجد بيانات كافية بعد</div>
+
+        <div class="cardx mb-15">
+          <div class="flex-between mb-8">
+            <span class="text-strong">حالة اليوم</span>
+            <span id="statsActivityLabel" class="muted" aria-live="polite">ابدأ اليوم</span>
+          </div>
+
+          <div class="progress-track">
+            <div id="tasksProgressBar" class="progress-fill" style="width:0%"></div>
+          </div>
+
+          <div class="muted mt-15" style="text-align:center;">
+            نسبة إنجاز اليوم:
+            <span id="statTasksPercentInline" class="text-strong" aria-live="polite">0%</span>
+          </div>
+
+          <div class="muted mt-15" style="text-align:center;">
+            التسبيح اليومي:
+            <span id="statDailyTasbeehInline" class="text-strong" aria-live="polite">0</span>
+            /
+            <span id="statDailyTasbeehTargetInline" class="text-strong" aria-live="polite">100</span>
+          </div>
+
+          <div class="stats-subprogress">
+            <div class="stats-subprogress__head">
+              <span class="stats-subprogress__label">تقدم هدف التسبيح</span>
+              <span id="statTasbeehPercentInline" class="stats-subprogress__value" aria-live="polite">0%</span>
+            </div>
+            <div class="progress-track">
+              <!-- شريط تقدم التسبيح (مرئي) -->
+              <div id="statTasbeehProgressBar" class="progress-fill" style="width:0%"></div>
+              <!-- شريط احتياطي للتوافق مع content.js -->
+              <div id="tasbeehProgressBar" style="display: none;"></div>
+            </div>
+          </div>
+
+          <div class="stats-panel-grid">
+            <div class="stats-mini-card">
+              <div class="stats-mini-card__label">إنجاز المهام</div>
+              <div id="statTasksProgressDetails" class="stats-mini-card__value" aria-live="polite">0 / 0</div>
+            </div>
+
+            <div class="stats-mini-card">
+              <div class="stats-mini-card__label">إنجاز التسبيح</div>
+              <div id="statTasbeehProgressDetails" class="stats-mini-card__value" aria-live="polite">0 / 100</div>
+            </div>
+
+            <!-- عنصر المتبقي من اليوم -->
+            <div class="stats-mini-card" style="grid-column: 1 / -1;">
+              <div class="stats-mini-card__label">المتبقي من اليوم</div>
+              <div id="statRemainingSummary" class="stats-mini-card__value" aria-live="polite">اكتمل هدف اليوم بالكامل ✅</div>
+            </div>
+          </div>
+
+          <!-- شريط تقدم المهام (إضافي) -->
+          <div class="mt-15">
+            <div class="flex-between muted small">
+              <span>تقدم المهام</span>
+              <span id="statTasksProgressPercent">0%</span>
+            </div>
+            <div class="progress-track">
+              <div id="statTasksProgressBar" class="progress-fill" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div class="stats-smart-box">
+            <div class="stats-smart-box__title">ملاحظة ذكية</div>
+            <div id="statsSmartMessage" class="stats-smart-box__text" aria-live="polite">ابدأ بخطوة صغيرة: مهمة واحدة أو دفعة تسبيح، والباقي سيأتي بسهولة ✨</div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stats-card">
+            <div class="stats-card__icon color-primary"><i class="fa-solid fa-fingerprint" aria-hidden="true"></i></div>
+            <div class="stats-card__label">تسابيح اليوم</div>
+            <div id="statDailyTasbeeh" class="stats-card__value color-primary" aria-live="polite">0</div>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-card__icon" style="color:#f97316;"><i class="fa-solid fa-fire" aria-hidden="true"></i></div>
+            <div class="stats-card__label">أيام الالتزام</div>
+            <div id="statStreak" class="stats-card__value" style="color:#f97316;" aria-live="polite">0</div>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-card__icon color-accent"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i></div>
+            <div class="stats-card__label">تسابيح الشهر</div>
+            <div id="statMonthlyTasbeeh" class="stats-card__value color-accent" aria-live="polite">0</div>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-card__icon" style="color:#7c3aed;"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+            <div class="stats-card__label">المهام المنجزة</div>
+            <div id="statTasksCompleted" class="stats-card__value" style="color:#7c3aed;" aria-live="polite">0</div>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-card__icon color-primary"><i class="fa-solid fa-list-ul" aria-hidden="true"></i></div>
+            <div class="stats-card__label">عدد المهام</div>
+            <div id="statTasksTotal" class="stats-card__value color-primary" aria-live="polite">0</div>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-card__icon color-accent"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i></div>
+            <div class="stats-card__label">نسبة الإنجاز</div>
+            <div id="statTasksPercent" class="stats-card__value color-accent" aria-live="polite">0%</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== إعلان قسم المهام ===== -->
+      <div id="tasksAdSlot" class="ad-slot" hidden aria-label="مساحة إعلانية"></div>
+    </section>
+
+    <section id="names" class="tab-content" role="tabpanel" aria-hidden="true">
+      <div id="namesGrid" class="home-grid home-grid--catalog" aria-live="polite"></div>
+      <!-- ===== إعلان قسم الأسماء ===== -->
+      <div id="namesAdSlot" class="ad-slot" hidden aria-label="مساحة إعلانية"></div>
+    </section>
+
+    <section id="stories" class="tab-content" role="tabpanel" aria-hidden="true">
+      <div id="storiesGrid" style="display: flex; flex-direction: column; gap: 12px;" aria-live="polite"></div>
+      <!-- ===== إعلان قسم القصص ===== -->
+      <div id="storiesAdSlot" class="ad-slot" hidden aria-label="مساحة إعلانية"></div>
+    </section>
+
+    <section id="settingsPage" class="tab-content" role="tabpanel" aria-hidden="true">
+      <div class="cardx">
+        <div class="surface-row mb-15">
+          <div class="flex-gap align-center">
+            <img id="modalUserAvatar" src="./assets/images/avatar.png" class="avatar" alt="صورة المستخدم">
+            <span id="userName" class="text-strong">حسابي</span>
+          </div>
+          <div id="authButtonArea"></div>
+        </div>
+
+        <label class="muted mb-8 text-strong" style="display:block;" for="dailyTargetInput">
+          <i class="fa-solid fa-bullseye" aria-hidden="true"></i> هدف التسبيح اليومي
+        </label>
+
+        <input
+          type="number"
+          id="dailyTargetInput"
+          class="input mb-20"
+          placeholder="100"
+          aria-label="هدف التسبيح اليومي"
+        />
+        
+                  <label class="muted mb-8 text-strong" style="display:block;">
+          <i class="fa-solid fa-bell" aria-hidden="true"></i> إشعارات الأذكار
+        </label>
+        <div class="cardx mb-20" style="padding: 15px; background: var(--bg-color);">
+          
+          <div class="flex-between mb-15">
+            <div>
+              <div class="text-strong">أذكار الصباح</div>
+              <input type="time" id="timeMorning" class="input mt-8" style="padding: 5px; width: 110px;" value="06:00" data-notify-time="morning">
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="notifyMorning" data-notify-toggle="morning">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="flex-between mb-15">
+            <div>
+              <div class="text-strong">أذكار المساء</div>
+              <input type="time" id="timeEvening" class="input mt-8" style="padding: 5px; width: 110px;" value="16:00" data-notify-time="evening">
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="notifyEvening" data-notify-toggle="evening">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="flex-between">
+            <div>
+              <div class="text-strong">أذكار النوم</div>
+              <input type="time" id="timeSleep" class="input mt-8" style="padding: 5px; width: 110px;" value="21:00" data-notify-time="sleep">
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="notifySleep" data-notify-toggle="sleep">
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <button type="button" class="btn btn--primary btn--full mt-15" id="saveNotificationsBtn">
+            <i class="fa-solid fa-check"></i> حفظ أوقات التنبيه
+          </button>
+        </div>
+
+
+        <label class="muted mb-8 text-strong" style="display:block;">
+          <i class="fa-solid fa-palette" aria-hidden="true"></i> المظهر
+        </label>
+
+        <div class="flex-gap mb-20" role="group" aria-label="اختيار المظهر">
+          <button type="button" class="btn" data-theme-btn="default">زمردي</button>
+          <button type="button" class="btn" data-theme-btn="dark">ليلي</button>
+          <button type="button" class="btn" data-theme-btn="royal">ملكي</button>
+        </div>
+
+        <hr class="divider">
+
+        <div id="installAppContainer" class="mb-12" style="display: none;" aria-live="polite"></div>
+
+        <!-- ===== صندوق المكافأة (شاهد إعلانًا) ===== -->
+        <div id="settingsRewardedAdBox" class="rewarded-box">
+          <h3 class="cardx__title mb-8">
+            <i class="fa-solid fa-gift" aria-hidden="true"></i>
+            شاهد إعلانًا
+          </h3>
+
+          <p class="muted mb-12">
+            شاهد إعلان فيديو كامل لتحصل على <strong>10 نقاط</strong>.
+            عند جمع <strong>100 نقطة</strong> يتم إيقاف الإعلانات لمدة <strong>24 ساعة</strong>.
+          </p>
+
+          <button
+            type="button"
+            class="btn btn--accent btn--full mb-12"
+            id="watchRewardedAdBtn"
+          >
+            <i class="fa-solid fa-play" aria-hidden="true"></i>
+            شاهد إعلانًا الآن
+          </button>
+
+          <div id="rewardPointsText" class="muted mb-8" aria-live="polite">
+            رصيدك الحالي: 0 نقطة
+          </div>
+
+          <div id="rewardRemainingText" class="muted mb-8" aria-live="polite">
+            متبقي 100 نقطة للحصول على يوم بدون إعلانات
+          </div>
+
+          <div id="adsDisabledUntilText" class="text-strong color-accent" hidden aria-live="polite"></div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- ===== روابط الصفحات الثابتة ===== -->
+        <div class="settings-links">
+          <a href="./about.html" target="_blank" rel="noopener" class="settings-link-btn">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            <span>عن التطبيق</span>
+          </a>
+
+          <a href="./privacy.html" target="_blank" rel="noopener" class="settings-link-btn">
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+            <span>سياسة الخصوصية</span>
+          </a>
+
+          <a href="./contact.html" target="_blank" rel="noopener" class="settings-link-btn">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+            <span>تواصل معنا</span>
+          </a>
+        </div>
+
+        <button type="button" class="btn btn--ghost btn--full btn--start mb-12" data-app-action="share">
+          <i class="fa-solid fa-share-nodes" aria-hidden="true"></i> شارك التطبيق كصدقة جارية
+        </button>
+
+        <button type="button" class="btn btn--ghost btn--full btn--start" data-app-action="updates">
+          <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i> البحث عن تحديثات
+        </button>
+      </div>
+    </section>
+  </div>
+</main>
+  <!-- بداية المودالات (تم حذف aboutModal) -->
+  <div id="customZekrModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="customZekrModalTitle">
+    <div class="modal-content overflow-y-auto" style="max-height: 80vh;">
+      <h2 id="customZekrModalTitle" class="cardx__title mb-15"><i class="fa-solid fa-pen" aria-hidden="true"></i> أذكاري المخصصة</h2>
+
+      <div class="flex-gap mb-20">
+        <input
+          type="text"
+          id="newCustomZekrInput"
+          class="input"
+          placeholder="اكتب ذكراً جديداً..."
+          data-custom-zekr-enter-save="true"
+          aria-label="إضافة ذكر مخصص"
+        />
+        <button type="button" class="btn btn--primary" style="width: 55px;" data-masbaha-action="save-custom-zekr" aria-label="إضافة الذكر">
+          <i class="fa-solid fa-plus" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div id="customZekrListContainer" class="mb-20" style="display: flex; flex-direction: column; gap: 10px;" aria-live="polite"></div>
+
+      <button type="button" class="btn btn--ghost btn--full" data-masbaha-action="close-custom-modal">إغلاق</button>
     </div>
+  </div>
 
-    <main>
-        <div id="counter" class="tab-content active card" role="tabpanel" aria-labelledby="tab-counter" aria-hidden="false">
-            <div class="dhikr-display" id="dhikrText">سبحان الله</div>
-            <div class="counter-container" onclick="incrementCounter()">
-                <div class="counter-circle">
-                    <span class="count-num" id="totalCounter">0</span>
-                    <span style="font-size: 1.2rem; margin-top: 10px; opacity: 0.9;" id="batchCounter" dir="ltr">0 / 33</span>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="copy-btn" style="margin: 0 auto; padding: 10px 25px;" onclick="confirmReset()">
-                    <span style="font-size: 1.2rem;">🔄</span> <span data-i18n="btn_reset">تصفير العداد</span>
-                </button>
-            </div>
-        </div>
-
-        <div id="azkar" class="tab-content card" role="tabpanel" aria-labelledby="tab-azkar" aria-hidden="true">
-            <div class="azkar-toggle">
-                <button class="azkar-opt active" onclick="toggleAzkar('morning', this)" data-i18n="azkar_morning">الصباح</button>
-                <button class="azkar-opt" onclick="toggleAzkar('evening', this)" data-i18n="azkar_evening">المساء</button>
-                <button class="azkar-opt" onclick="toggleAzkar('sleep', this)" data-i18n="azkar_sleep">النوم</button>
-            </div>
-            <div id="azkarList" style="display: flex; flex-direction: column; gap: 15px;"></div>
-        </div>
-
-        <div id="tracker" class="tab-content card" role="tabpanel" aria-labelledby="tab-tracker" aria-hidden="true">
-            <h2 style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:800;" data-i18n="title_tracker">الورد اليومي</h2>
-            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:15px;" data-i18n="desc_tracker">قليل دائم خير من كثير منقطع</p>
-            <div id="trackerList" style="display: flex; flex-direction: column; gap: 10px;"></div>
-        </div>
-
-        <div id="duas" class="tab-content card" role="tabpanel" aria-labelledby="tab-duas" aria-hidden="true">
-            <div class="azkar-toggle" style="margin-bottom: 20px;">
-                <button class="azkar-opt active" onclick="toggleDuaCategory('deceased', this)" data-i18n="dua_deceased">للمتوفى</button>
-                <button class="azkar-opt" onclick="toggleDuaCategory('general', this)" data-i18n="dua_general">أدعية عامة</button>
-            </div>
-            <div id="duasList" style="display: flex; flex-direction: column; gap: 15px; max-height: 55vh; overflow-y: auto; padding-right: 5px;"></div>
-        </div>
-
-        <div id="quran" class="tab-content card" role="tabpanel" aria-labelledby="tab-quran" aria-hidden="true">
-            <a href="https://quran.com" target="_blank" rel="noopener noreferrer" class="surah-link">
-                <span style="display: flex; align-items: center; gap: 10px;">📖 <span data-i18n="quran_full">المصحف كاملاً</span></span>
-                <span style="color: var(--primary);">❯</span>
-            </a>
-            <a href="https://quran.com/36" target="_blank" rel="noopener noreferrer" class="surah-link">
-                <span style="display: flex; align-items: center; gap: 10px;">📜 <span data-i18n="quran_yaseen">سورة يس</span></span>
-                <span style="color: var(--primary);">❯</span>
-            </a>
-            <a href="https://quran.com/67" target="_blank" rel="noopener noreferrer" class="surah-link">
-                <span style="display: flex; align-items: center; gap: 10px;">📜 <span data-i18n="quran_mulk">سورة الملك</span></span>
-                <span style="color: var(--primary);">❯</span>
-            </a>
-            <a href="https://quran.com/18" target="_blank" rel="noopener noreferrer" class="surah-link">
-                <span style="display: flex; align-items: center; gap: 10px;">📜 <span data-i18n="quran_kahf">سورة الكهف</span></span>
-                <span style="color: var(--primary);">❯</span>
-            </a>
-        </div>
-
-        <div id="names" class="tab-content card" role="tabpanel" aria-labelledby="tab-names" aria-hidden="true">
-            <h2 style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:800;" data-i18n="title_names">أسماء الله الحسنى</h2>
-            <div id="namesGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"></div>
-        </div>
-
-        <div id="stories" class="tab-content card" role="tabpanel" aria-labelledby="tab-stories" aria-hidden="true">
-            <h2 style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:800;" data-i18n="title_stories">قصص وعبر</h2>
-            <div id="storiesList" style="display: flex; flex-direction: column; gap: 15px;"></div>
-        </div>
-
-        <div class="sadaqa-card">
-            <h3 style="margin-bottom: 10px; font-size: 1.4rem;" data-i18n="sadaqa_title">✨ صدقة جارية لمن تحب</h3>
-            <p style="font-size: 0.95rem; margin-bottom: 15px; opacity: 0.9;" data-i18n="sadaqa_desc">أنشئ نسخة من هذا التطبيق باسم من تحب من الأموات ليكون صدقة جارية لروحهم.</p>
-            <button class="sadaqa-btn" onclick="openModal()" data-i18n="btn_create_sadaqa">أنشئ صدقة جارية الآن</button>
-        </div>
-
-        <div class="ad-container">
-            <div class="ad-box" style="border: none; background: transparent; height: auto;">
-                <span style="font-size: 0.75rem; margin-bottom: 5px; opacity: 0.7; display: block; text-align: center;" data-i18n="ad_space">مساحة إعلانية (تظهر هنا بعد موافقة أدسنس)</span>
-                <ins class="adsbygoogle"
-                     style="display:block; min-height:120px"
-                     data-ad-client="ca-pub-5661854146208967"
-                     data-ad-slot="1234567890"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                     try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
-                </script>
-            </div>
-        </div>
-
-    </main>
-
-    <footer>
-        <p>صدقة جارية | <span class="deceased-name" style="font-size: 1rem; color:inherit; text-shadow: none;">المرحوم صبري كامل سليم</span></p>
-        <p style="margin-top: 5px; opacity: 0.7; font-size: 0.8rem; font-weight: bold;" data-i18n="footer_dev">Developed by Yousef Sabry</p>
-    </footer>
-
-    <div class="modal-overlay" id="sadaqaModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">×</span>
-
-            <div id="step1">
-                <h3 style="color: var(--primary); margin-bottom: 15px;" data-i18n="modal_title1">أنشئ صدقة جارية</h3>
-                <p style="font-size: 0.9rem; color: var(--text-sub); margin-bottom: 15px;" data-i18n="modal_desc1">اكتب اسم المتوفى ليتم إنشاء رابط مخصص باسمه:</p>
-
-                <div style="display: flex; gap: 20px; margin-bottom: 15px; justify-content: center; font-size: 1.1rem;">
-                    <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                        <input type="radio" name="gender" value="m" checked> 👨 ذكر
-                    </label>
-                    <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                        <input type="radio" name="gender" value="f"> 🧕 أنثى
-                    </label>
-                </div>
-
-                <input type="text" id="deceasedNameInput" class="modal-input" placeholder="مثال: أحمد محمود" />
-                <button class="sadaqa-btn" style="width: 100%; margin-top: 5px;" onclick="generateSadaqaLink()" data-i18n="btn_generate">توليد الرابط</button>
-            </div>
-
-            <div id="step2" style="display: none;">
-                <h3 style="color: var(--primary); margin-bottom: 15px;" data-i18n="modal_title2">تم الإنشاء بنجاح! 🎉</h3>
-                <p style="font-size: 0.9rem; color: var(--text-sub); margin-bottom: 15px;" data-i18n="modal_desc2">هذا هو الرابط المخصص، انسخه وشاركه مع عائلتك وأصدقائك:</p>
-                <input type="text" id="generatedLinkUrl" class="modal-input" readonly />
-                <div class="modal-actions">
-                    <button class="btn-outline" onclick="copyLinkAction()" data-i18n="btn_copy_link">📋 نسخ الرابط</button>
-                    <button class="btn-main" onclick="openLinkAction()" data-i18n="btn_open_link">فتح الرابط ❯</button>
-                </div>
-            </div>
-        </div>
+  <div id="updateModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="updateModalTitle">
+    <div class="modal-content cardx--center">
+      <div class="mb-12 color-accent" style="font-size: 3rem;"><i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i></div>
+      <h2 id="updateModalTitle" class="cardx__title justify-center" style="font-size: 1.4rem;">تحديث جديد متاح! 🎉</h2>
+      <p class="muted mb-20">لقد قمنا بإضافة تحسينات ومميزات جديدة للتطبيق. هل تود تحديث التطبيق الآن للحصول على أفضل تجربة؟</p>
+      <div class="flex-gap">
+        <button type="button" class="btn btn--primary flex-1" data-app-modal-action="apply-update">تحديث الآن</button>
+        <button type="button" class="btn btn--ghost flex-1" data-app-modal-action="close-update">لاحقاً</button>
+      </div>
     </div>
+  </div>
 
-    <script defer src="data/azkar.js"></script>
-    <script defer src="data/duas.js"></script>
-    <script defer src="data/tasks.js"></script>
-    <script defer src="data/stories.js"></script>
-    <script defer src="data/names.js"></script>
+  <div id="deleteZekrModal" class="modal-overlay" style="z-index: 2005;" role="dialog" aria-modal="true" aria-labelledby="deleteZekrModalTitle">
+    <div class="modal-content cardx--center">
+      <div class="mb-12 color-danger" style="font-size: 3rem;"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></div>
+      <h2 id="deleteZekrModalTitle" class="cardx__title justify-center color-danger" style="font-size: 1.4rem;">تأكيد الحذف</h2>
+      <p class="muted mb-20">هل أنت متأكد من حذف هذا الذكر من قائمتك؟</p>
+      <div class="flex-gap">
+        <button type="button" class="btn flex-1" style="background: #ef4444; color: white; border-color: #ef4444;" data-masbaha-action="confirm-delete-zekr">نعم، احذف</button>
+        <button type="button" class="btn btn--ghost flex-1" data-masbaha-action="close-delete-modal">إلغاء</button>
+      </div>
+    </div>
+  </div>
 
-    <script defer src="js/core.js"></script>
-    <script defer src="js/ui.js"></script>
-    <script defer src="js/pwa.js"></script>
+  <div id="resetMasbahaModal" class="modal-overlay" style="z-index: 2005;" role="dialog" aria-modal="true" aria-labelledby="resetMasbahaModalTitle">
+    <div class="modal-content cardx--center">
+      <div class="mb-12" style="font-size: 3rem; color: #f97316;"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i></div>
+      <h2 id="resetMasbahaModalTitle" class="cardx__title justify-center" style="font-size: 1.4rem; color: #f97316;">تصفير المسبحة</h2>
+      <p class="muted mb-20">هل أنت متأكد من تصفير العداد الحالي؟<br>(لن يؤثر هذا على الإجمالي اليومي)</p>
+      <div class="flex-gap">
+        <button type="button" class="btn flex-1" style="background: #f97316; color: white; border-color: #f97316;" data-masbaha-action="confirm-reset">نعم، صفر العداد</button>
+        <button type="button" class="btn btn--ghost flex-1" data-masbaha-action="close-reset-modal">إلغاء</button>
+      </div>
+    </div>
+  </div>
+<!-- نهاية الجزء الثالث -->
+  <div id="deleteTaskModal" class="modal-overlay" style="z-index: 2005;" role="dialog" aria-modal="true" aria-labelledby="deleteTaskModalTitle">
+    <div class="modal-content cardx--center">
+      <div class="mb-12 color-danger" style="font-size: 3rem;"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></div>
+      <h2 id="deleteTaskModalTitle" class="cardx__title justify-center color-danger" style="font-size: 1.4rem;">حذف مهمة</h2>
+      <p class="muted mb-20">هل أنت متأكد من حذف هذه المهمة من وردك اليومي؟</p>
+      <div class="flex-gap">
+        <button type="button" class="btn flex-1" style="background: #ef4444; color: white; border-color: #ef4444;" data-tasks-action="confirm-delete">نعم، احذف</button>
+        <button type="button" class="btn btn--ghost flex-1" data-tasks-action="close-delete-modal">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="restoreTasksModal" class="modal-overlay" style="z-index: 2005;" role="dialog" aria-modal="true" aria-labelledby="restoreTasksModalTitle">
+    <div class="modal-content cardx--center">
+      <div class="mb-12 color-primary" style="font-size: 3rem;"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></div>
+      <h2 id="restoreTasksModalTitle" class="cardx__title justify-center color-primary" style="font-size: 1.4rem;">استعادة المهام</h2>
+      <p class="muted mb-20">هل تود استعادة المهام الافتراضية؟<br>(لن يتم مسح مهامك الحالية، سيتم فقط إضافة المهام الناقصة)</p>
+      <div class="flex-gap">
+        <button type="button" class="btn btn--primary flex-1" data-tasks-action="confirm-restore">نعم، استعد</button>
+        <button type="button" class="btn btn--ghost flex-1" data-tasks-action="close-restore-modal">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <template id="tpl-dashboard-btn">
+    <button type="button" class="home-btn">
+      <div class="home-icon-box"><i class="fa-solid" aria-hidden="true"></i></div>
+      <span class="home-btn-text"></span>
+    </button>
+  </template>
+
+  <template id="tpl-subview-header">
+    <button type="button" class="btn back-btn mb-20" onclick="window.history.back()">
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> العودة
+    </button>
+    <div class="cardx--center mb-20">
+      <h2 class="amiri-text cardx__title subview-title justify-center" style="font-size: 1.8rem;"></h2>
+      <div class="section-accent-line section-accent-line--sm"></div>
+    </div>
+  </template>
+
+  <template id="tpl-dua-card">
+    <div class="cardx cardx--message mb-15">
+      <p class="amiri-text dua-text mb-15" style="font-size: 1.45rem; line-height: 1.9; text-align: justify;"></p>
+      <div class="flex-gap">
+        <button type="button" class="btn btn--ghost copy-btn flex-1" style="min-height: 38px; font-size: 0.9rem;"><i class="fa-solid fa-copy" aria-hidden="true"></i> نسخ</button>
+        <button type="button" class="btn btn--ghost share-btn flex-1" style="min-height: 38px; font-size: 0.9rem;"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i> مشاركة</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-name-card">
+    <div class="cardx cardx--center mb-0">
+      <h3 class="amiri-text name-title color-primary mb-8" style="font-size: 1.6rem;"></h3>
+      <p class="muted name-desc"></p>
+    </div>
+  </template>
+
+  <template id="tpl-story-card">
+    <div class="cardx mb-15">
+      <h3 class="story-title color-accent mb-12" style="font-size: 1.3rem;"></h3>
+      <p class="amiri-text story-content mb-15" style="font-size: 1.25rem; line-height: 1.9; text-align: justify;"></p>
+      <div class="rounded-sm" style="background: var(--primary-light); padding: 12px; border-right: 4px solid var(--primary);">
+        <p class="story-lesson"></p>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-zekr-card">
+    <div class="cardx zekr-card mb-0" style="transition: all 0.3s ease;">
+      <p class="amiri-text zekr-text mb-15" style="font-size: 1.4rem; line-height: 1.9; text-align: justify;"></p>
+      <div class="zekr-fadl-container mb-15 rounded-sm" style="background: var(--accent-light); padding: 10px; border-right: 3px solid var(--accent); display: none;">
+        <p class="muted zekr-fadl" style="margin: 0; color: var(--accent); font-weight: bold;"></p>
+      </div>
+      <div class="flex-gap mb-15">
+        <button type="button" class="btn btn--ghost copy-btn flex-1" style="min-height: 40px; font-size: 0.95rem;"><i class="fa-solid fa-copy" aria-hidden="true"></i> نسخ</button>
+        <button type="button" class="btn btn--ghost share-btn flex-1" style="min-height: 40px; font-size: 0.95rem;"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i> مشاركة</button>
+      </div>
+      <button type="button" class="btn flex-between zekr-counter-btn" style="height: 55px; font-size: 1.15rem;">
+        <span class="zekr-status"></span>
+        <span class="zekr-count rounded-sm" style="font-size: 1.4rem; background: rgba(0,0,0,0.15); padding: 2px 15px;" dir="ltr"></span>
+      </button>
+    </div>
+  </template>
+
+  <!-- Template المهمة مع data-roles -->
+  <template id="tpl-task-card">
+    <div class="cardx flex-between task-card mb-0" style="padding: 12px 15px; transition: all 0.3s ease;">
+      <span class="task-text" data-role="task-text" style="font-size: 1.1rem; font-weight: bold;"></span>
+      <div class="flex-gap">
+        <button type="button" class="icon-btn icon-btn--transparent toggle-btn" data-role="toggle-task" aria-label="تبديل حالة المهمة"><i class="fa-solid" aria-hidden="true"></i></button>
+        <button type="button" class="icon-btn icon-btn--transparent delete-btn color-danger" data-role="delete-task" aria-label="حذف المهمة"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-surah-btn">
+    <button type="button" class="home-btn surah-item" style="padding: 10px; justify-content: space-between;">
+      <div class="flex-gap align-center">
+        <div class="home-icon-box" style="width: 35px; height: 35px; font-size: 1rem;"><i class="fa-solid fa-book-quran" aria-hidden="true"></i></div>
+        <span class="home-btn-text surah-name"></span>
+      </div>
+      <span class="muted surah-num rounded-sm border-soft bg-soft" style="font-size: 0.85rem; padding: 2px 8px;"></span>
+    </button>
+  </template>
+
+<!-- DATA -->
+    <script type="module" src="data/azkar.js"></script>
+  <script type="module" src="data/names.js"></script>
+  <!-- <script type="module" src="data/messages.js"></script> تم حذفه -->
+
+  <script type="module" src="js/dom.js"></script>
+
+  <script type="module" src="js/storage.js"></script>
+
+  <!-- ===== ملفات الإعلانات والمكافآت ===== -->
+  <script type="module" src="js/rewards.js"></script>
+  <script type="module" src="js/ads.js"></script>
+
+  <script type="module" src="js/achievements.js"></script>
+
+  <script type="module" src="js/content.js"></script>
+
+  <script type="module" src="js/masbaha.js"></script>
+
+  <script type="module" src="js/tasks/tasks-core.js"></script>
+  <script type="module" src="js/tasks/tasks-stats.js"></script>
+  <script type="module" src="js/tasks/tasks-motivation.js"></script>
+  <script type="module" src="js/tasks/tasks-ui.js"></script>
+
+  <script type="module" src="js/tasks.js"></script>
+
+  <script type="module" src="js/quran.js"></script>
+  
+  <script type="module" src="js/notifications.js"></script>
+
+  <script type="module" src="js/app.js"></script>
+
+  <script type="module" src="js/pwa.js"></script>
+
+  <!-- ===== نافذة إعلان الفيديو المكافئ ===== -->
+  <!--
+    يتم عرض هذا المكون عندما يضغط المستخدم على زر "شاهد إعلانًا" في
+    صفحة الإعدادات. يحتوي على عداد تنازلي لمحاكاة مدة الإعلان. عند
+    انتهاء العد، يتم منح المستخدم نقاط المكافأة وإغلاق النافذة تلقائيًا.
+    إذا أغلق المستخدم النافذة مبكرًا فلن يحصل على النقاط.
+  -->
+    <div id="rewardedVideoModal" class="video-modal is-hidden" aria-hidden="true">
+    <div class="video-modal__overlay"></div>
+    <div class="video-modal__content" role="dialog" aria-modal="true" style="width: 95%; max-width: 350px; padding: 15px;">
+      
+      <div id="rewardedAdContainer" style="min-height: 250px; background: #f0f5f7; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; overflow: hidden; position: relative;">
+         <span style="color: #7F8C8D; font-size: 0.9rem;">جاري تحميل الإعلان...</span>
+      </div>
+
+      <p class="video-modal__message" style="font-size: 0.95rem; margin-bottom: 10px;">
+        شاهد الإعلان للحصول على المكافأة... <span id="videoAdCountdown" style="color: var(--primary); font-weight: bold;">30</span> ثانية
+      </p>
+      
+      <button id="closeVideoAdBtn" type="button" class="btn btn--ghost" disabled style="opacity: 0.5; cursor: not-allowed; width: 100%;">انتظر لإنهاء الإعلان</button>
+    </div>
+  </div>
+
+
+  <!-- ===== إعلان فيديو ثابت في أسفل الصفحة (مخفي مؤقتاً) ===== -->
+  <!--
+    تم تخصيص هذا الحاوي لعرض فيديو إعلاني ثابت في أسفل الشاشة.
+    يمكنك استبدال محتوى الـ <span> بكود الفيديو أو iframe المقدم من
+    Adsterra أو أي شبكة إعلانات أخرى لعرض إعلان مستمر.
+    حالياً تم إخفاؤه حتى يتم توفير كود إعلان حقيقي.
+  -->
+  <div id="fixedVideoBanner" class="fixed-video-banner" aria-label="إعلان فيديو ثابت" style="display: none;">
+    <span>إعلان فيديو ثابت هنا – قم باستبدال هذا النص بكود الفيديو من شبكة الإعلانات.</span>
+  </div>
+
+
 </body>
 </html>
+<!-- نهاية الجزء الرابع -->

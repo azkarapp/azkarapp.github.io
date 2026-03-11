@@ -1,4 +1,6 @@
-const ALLAH_NAMES = {
+export const ALLAH_NAMES =
+
+{
     ar: [
         { name: "الله", desc: "الاسم الأعظم الجامع لجميع صفات الجلال والكمال." },
         { name: "الرَّحْمَنُ", desc: "واسع الرحمة الذي وسعت رحمته كل شيء في الدنيا." },
@@ -202,3 +204,4 @@ const ALLAH_NAMES = {
         { name: "As-Saboor", desc: "The Patient." }
     ]
 };
+

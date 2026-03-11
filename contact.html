@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تواصل معنا - أذكار المسلم</title>
+  <meta name="description" content="تواصل مع فريق تطبيق أذكار المسلم: استفسارات، اقتراحات، ملاحظات، شكاوى، أو مجرد كلمة طيبة." />
+  <!-- Font Awesome للأيقونات (إصدار حديث) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Tajawal', 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: #f2f7fa;
+      color: #1e2e3a;
+      line-height: 1.8;
+      padding: 30px 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 20px 40px rgba(0, 30, 20, 0.08);
+      overflow: hidden;
+      padding: 40px 40px 50px;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      color: #125B50;
+      margin-bottom: 10px;
+      border-bottom: 4px solid #D8A25E;
+      padding-bottom: 15px;
+      display: inline-block;
+    }
+
+    .subhead {
+      font-size: 1.2rem;
+      color: #2c3e50;
+      margin: 25px 0 40px;
+      max-width: 700px;
+    }
+
+    /* شبكة بطاقات التواصل */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin: 40px 0;
+    }
+
+    .contact-card {
+      background: #f9fdfe;
+      border: 1px solid #dde9ef;
+      border-radius: 28px;
+      padding: 30px 20px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 6px 14px rgba(0, 20, 10, 0.02);
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 30px rgba(18, 91, 80, 0.12);
+    }
+
+    .contact-icon {
+      width: 80px;
+      height: 80px;
+      background: #e1f2ef;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2.2rem;
+      color: #125B50;
+    }
+
+    .contact-card h3 {
+      font-size: 1.6rem;
+      color: #125B50;
+      margin-bottom: 10px;
+    }
+
+    .contact-card p {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+
+    .contact-btn {
+      display: inline-block;
+      background: #125B50;
+      color: white !important;
+      padding: 10px 28px;
+      border-radius: 40px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .contact-btn i {
+      margin-left: 6px;
+    }
+
+    .contact-btn:hover {
+      background: #0f4d42;
+      text-decoration: none;
+    }
+
+    /* قسم المراسلة المباشرة */
+    .direct-message {
+      background: #f4fafd;
+      border-radius: 28px;
+      padding: 35px;
+      margin: 40px 0;
+      border: 1px solid #cde3e9;
+    }
+
+    .direct-message h2 {
+      font-size: 2rem;
+      color: #125B50;
+      margin-bottom: 20px;
+    }
+
+    .direct-message p {
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+
+    .email-badge {
+      background: white;
+      border-radius: 80px;
+      padding: 16px 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 1.4rem;
+      border: 2px solid #D8A25E;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      margin: 15px 0;
+      direction: ltr;
+    }
+
+    .email-badge i {
+      color: #D8A25E;
+      font-size: 2rem;
+    }
+
+    .email-badge a {
+      color: #125B50;
+      font-weight: 700;
+      text-decoration: none;
+      unicode-bidi: embed;
+    }
+
+    .email-badge a:hover {
+      text-decoration: underline;
+    }
+
+    /* أسئلة متكررة مبسطة */
+    .faq-section {
+      margin-top: 60px;
+    }
+
+    .faq-section h2 {
+      font-size: 2rem;
+      color: #125B50;
+      margin-bottom: 30px;
+      border-right: 6px solid #D8A25E;
+      padding-right: 20px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid #dae2e7;
+      padding: 20px 0;
+    }
+
+    .faq-question {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0d473b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .faq-question i {
+      color: #D8A25E;
+      font-size: 1.5rem;
+    }
+
+    .faq-answer {
+      padding-right: 40px;
+      margin-top: 12px;
+      color: #2c3e50;
+    }
+
+    /* footer */
+    .back-link {
+      display: inline-block;
+      margin-top: 50px;
+      background: #D8A25E;
+      color: #0A2E24;
+      padding: 14px 36px;
+      border-radius: 60px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(216, 162, 94, 0.3);
+      text-decoration: none;
+    }
+
+    .back-link i {
+      margin-left: 8px;
+    }
+
+    .back-link:hover {
+      background: #c9924b;
+      color: #0A2E24;
+      text-decoration: none;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(216, 162, 94, 0.4);
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #d5e0e5;
+      margin: 40px 0;
+    }
+
+    .footer-note {
+      background: #eef4f7;
+      padding: 20px;
+      border-radius: 20px;
+      margin-top: 40px;
+      font-size: 0.95rem;
+      color: #3a5a6f;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 25px 20px; }
+      h1 { font-size: 2rem; }
+      .email-badge { flex-direction: column; text-align: center; padding: 16px; }
+      .email-badge i { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>تواصل معنا</h1>
+    <p class="subhead">
+      نحن هنا من أجلك! سواء كان لديك استفسار، اقتراح، ملاحظة على التطبيق، أو حتى كلمة شكر – لا تتردد في التواصل. فريق أذكار المسلم يقرأ كل رسالة ويحرص على التحسين المستمر.
+    </p>
+
+    <!-- بطاقات التواصل المتنوعة -->
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fa-regular fa-envelope"></i></div>
+        <h3>البريد الإلكتروني</h3>
+        <p>للاقتراحات والاستفسارات والشكاوى، أرسل لنا بريداً وسنرد في أقرب وقت.</p>
+        <a href="mailto:yosefmoh372@gmail.com" class="contact-btn"><i class="fa-regular fa-paper-plane"></i> راسلنا</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fa-brands fa-facebook-f"></i></div>
+        <h3>فيسبوك</h3>
+        <p>تابعنا على فيسبوك لآخر الأخبار والتحديثات، وشاركنا رأيك.</p>
+        <a href="https://www.facebook.com/profile.php?id=61571261768622" target="_blank" class="contact-btn"><i class="fa-brands fa-facebook"></i> تابعنا</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fa-brands fa-twitter"></i></div>
+        <h3>تويتر</h3>
+        <p>نشر تغريدات قصيرة ونصائح يومية، ويمكنك مراسلتنا مباشرة.</p>
+        <a href="https://twitter.com/azkar_app" target="_blank" class="contact-btn"><i class="fa-brands fa-x-twitter"></i> تواصل</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fa-brands fa-whatsapp"></i></div>
+        <h3>واتساب</h3>
+        <p>للتواصل السريع والملاحظات الصوتية، أضفنا على واتساب.</p>
+        <a href="https://wa.me/201234567890" target="_blank" class="contact-btn"><i class="fa-brands fa-whatsapp"></i> محادثة</a>
+      </div>
+    </div>
+
+    <!-- قسم المراسلة المباشرة -->
+    <div class="direct-message">
+      <h2>📧 راسلنا مباشرة</h2>
+      <p>
+        يمكنك دائماً مراسلتنا عبر البريد الإلكتروني. نحن نقرأ جميع الرسائل ونسعد باقتراحاتك.
+      </p>
+      <div class="email-badge">
+        <i class="fa-regular fa-envelope-open-text"></i>
+        <a href="mailto:yosefmoh372@gmail.com">yosefmoh372@gmail.com</a>
+      </div>
+      <p style="font-size: 1rem; margin-top: 15px;">
+        <i class="fa-regular fa-clock" style="color: #125B50;"></i> متوسط وقت الرد: 24-48 ساعة (عدا العطلات).
+      </p>
+    </div>
+
+    <!-- أسئلة متكررة قصيرة -->
+    <div class="faq-section">
+      <h2>📌 أسئلة قد تهمك</h2>
+      
+      <div class="faq-item">
+        <div class="faq-question"><i class="fa-regular fa-circle-question"></i> كيف يمكنني اقتراح ميزة جديدة؟</div>
+        <div class="faq-answer">ببساطة، أرسل لنا بريداً إلكترونياً مع وصف الميزة المقترحة، وسنناقشها وفريق التطوير. كلما كان الوصف أكثر تفصيلاً، كلما سهلت علينا مهمة تنفيذها.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question"><i class="fa-regular fa-circle-question"></i> واجهت مشكلة تقنية (bug)، ماذا أفعل؟</div>
+        <div class="faq-answer">نأسف على ذلك! أرسل لنا وصفاً دقيقاً للمشكلة، الخطوات التي أدت إليها، ونوع جهازك والمتصفح الذي تستخدمه. صور أو مقطع فيديو مساعد جداً. سنحل المشكلة بأسرع وقت.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question"><i class="fa-regular fa-circle-question"></i> هل يمكنني المساهمة في تطوير التطبيق؟</div>
+        <div class="faq-answer">نعم! نحن نرحب بالمساهمين في المحتوى، التدقيق اللغوي، البرمجة، أو حتى نشر التطبيق بين الأصدقاء. تواصل معنا وسنرشدك إلى كيفية المساعدة.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question"><i class="fa-regular fa-circle-question"></i> أين أجد سياسة الخصوصية وشروط الاستخدام؟</div>
+        <div class="faq-answer">يمكنك الاطلاع على <a href="privacy.html" style="color:#125B50; font-weight:600;">سياسة الخصوصية</a> و <a href="terms.html" style="color:#125B50; font-weight:600;">شروط الاستخدام</a> من الروابط المخصصة.</div>
+      </div>
+    </div>
+
+    <!-- تذكير بالصفحات الأخرى -->
+    <hr />
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin: 30px 0;">
+      <a href="about.html" style="color:#125B50; font-weight:600;"><i class="fa-regular fa-address-card"></i> عن التطبيق</a>
+      <a href="privacy.html" style="color:#125B50; font-weight:600;"><i class="fa-regular fa-lock"></i> سياسة الخصوصية</a>
+      <a href="contact.html" style="color:#125B50; font-weight:600;"><i class="fa-regular fa-message"></i> تواصل معنا</a>
+      <a href="index.html" style="color:#125B50; font-weight:600;"><i class="fa-regular fa-house"></i> الصفحة الرئيسية</a>
+    </div>
+
+    <a href="./index.html" class="back-link"><i class="fa-regular fa-arrow-right"></i> العودة إلى التطبيق</a>
+
+    <div class="footer-note">
+      جميع الحقوق محفوظة © 2025 تطبيق أذكار المسلم. يمكنك التواصل بأي طريقة تناسبك، ونحن هنا لخدمتك ❤️
+    </div>
+  </div>
+</body>
+</html>

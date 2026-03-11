@@ -1,18 +1,47 @@
 {
-  "name": "صدقة جارية | Sadaqa",
-  "short_name": "Sadaqa",
-  "id": "/Saber/",
-  "start_url": "/Saber/index.html",
-  "scope": "/Saber/",
-  "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
-  "background_color": "#F4F9F4",
-  "theme_color": "#1E6F5C",
-  "description": "تطبيق صدقة جارية، مسبحة، وأذكار",
-  "orientation": "portrait",
+  "id": "./",
+  "name": "أذكار المسلم",
+  "short_name": "أذكار",
+  "description": "تطبيق إسلامي شامل: أذكار، قرآن، مسبحة ذكية، مهام وقصص.",
   "lang": "ar",
   "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A2E24",
+  "theme_color": "#125B50",
+  "categories": [
+    "lifestyle",
+    "productivity",
+    "education"
+  ],
   "icons": [
+    {
+      "src": "icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
     {
       "src": "icons/icon-192x192.png",
       "sizes": "192x192",
@@ -24,6 +53,14 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/Preview.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "label": "واجهة تطبيق أذكار المسلم"
     }
   ]
 }

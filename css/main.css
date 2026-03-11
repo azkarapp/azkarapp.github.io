@@ -1,651 +1,725 @@
 /* ==========================================
-   ملف main.css (الهيكل الأساسي والجماليات الأصلي + تحسينات احترافية)
-========================================== */
-
-/* ---------------------------
-   إعدادات عامة + تحسينات UX
----------------------------- */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
+   CSS Reset & Base
+   ========================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html {
-  /* يمنع “قفز” التخطيط عند ظهور/اختفاء scrollbar في بعض المتصفحات */
-  scrollbar-gutter: stable;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+/*
+ * تعريف متغير ارتفاع الإعلان الثابت بحيث يمكن تعديل padding بطريقة
+ * مرنة. يمكن تعديل هذه القيمة لاحقاً بدون تعديل الشيفرة الأخرى.
+ */
+:root {
+    --fixed-video-height: 100px;
 }
 
 body {
-  font-family: 'Tajawal', sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-main);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  transition: background-color 0.4s ease, color 0.4s ease;
-
-  /* تحسينات للهواتف ذات الحواف الحديثة (Notch) */
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
+    font-family: "Tajawal", sans-serif;
+    background-color: var(--bg-color);
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
+    color: var(--text-main);
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1.7;
+    /*
+     * زيادة المسافة السفلية للجسم لاستيعاب عنصر الإعلان الثابت في الأسفل.
+     * نجمع بين المسافة الأساسية (20px) وارتفاع الإعلان الثابت المحدد أعلاه.
+     */
+    padding-bottom: calc(20px + var(--fixed-video-height));
+    overflow-x: hidden;
+    transition:
+        background-color 0.3s ease,
+        background-image 0.3s ease,
+        color 0.3s ease;
 }
 
-/* منع مشاكل overflow في بعض النصوص الطويلة */
-body, main, header {
-  max-width: 100%;
+img,
+svg,
+video,
+canvas,
+audio,
+iframe {
+    display: block;
+    max-width: 100%;
 }
 
-main {
-  width: 100%;
-  max-width: 600px;
-  padding: 0 20px 20px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-header {
-  width: 100%;
-  max-width: 600px;
-  padding: 20px;
-  text-align: center;
-  position: relative;
-}
-
-/* ---------------------------
-   Accessibility: Focus styles
----------------------------- */
-:focus {
-  outline: none;
-}
-
-/* Focus واضح لمن يستخدمون الكيبورد */
-:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--primary) 70%, transparent);
-  outline-offset: 3px;
-  border-radius: 12px;
-}
-
-/* ---------------------------
-   Top Bar
----------------------------- */
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+button,
+input,
+textarea,
+select {
+    font: inherit;
 }
 
 button {
-  font-family: inherit;
+    border: none;
+    background: none;
 }
 
-.lang-btn,
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* ==========================================
+   Typography
+   ========================================== */
+.amiri-text {
+    font-family: "Amiri", serif;
+    line-height: 2;
+}
+
+.muted {
+    color: var(--text-sub);
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-strong {
+    font-weight: 700;
+}
+
+/* ==========================================
+   Focus & Accessibility
+   ========================================== */
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--primary) 60%, white);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+    box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--card-bg) 70%, transparent),
+        0 0 0 6px color-mix(in srgb, var(--primary) 28%, transparent);
+}
+
+::selection {
+    background: var(--primary-light);
+    color: var(--text-main);
+}
+
+[aria-hidden="true"] {
+    pointer-events: none;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* ==========================================
+   Buttons (Base)
+   ========================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    background: var(--card-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease,
+        filter 0.2s ease;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.btn:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+.btn:disabled,
+.btn[disabled],
+.btn[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+    filter: saturate(0.8);
+}
+
+.btn--primary {
+    background: var(--primary); /* سطر البديل الآمن للمتصفحات القديمة */
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--primary) 92%, white),
+        var(--primary)
+    );
+    color: #ffffff;
+    border-color: var(--primary);
+}
+
+
+.btn--primary:hover {
+    filter: brightness(1.03);
+}
+
+.btn--accent {
+    background: var(--accent); /* سطر البديل الآمن */
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--accent) 92%, white),
+        var(--accent)
+    );
+    color: #ffffff;
+    border-color: var(--accent);
+}
+
+
+.btn--accent:hover {
+    filter: brightness(1.03);
+}
+
+[data-theme="royal"] .btn--primary,
+[data-theme="royal"] .btn--accent {
+    color: #0A2E24;
+}
+
+.btn--ghost {
+    background: transparent;
+    border-color: transparent;
+    color: var(--primary);
+}
+
+.btn--ghost:hover {
+    background: var(--primary-light);
+}
+
+.btn--ghost:active {
+    background: var(--primary-light);
+}
+
+.btn--full {
+    width: 100%;
+}
+
+.btn--start {
+    justify-content: flex-start;
+}
+
+.btn--compact {
+    min-height: auto;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+}
+
 .icon-btn {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 6px 15px;
-  font-weight: bold;
-  color: var(--primary);
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-
-  /* تحسين مساحة اللمس */
-  min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--primary);
+    flex-shrink: 0;
 }
 
-.lang-btn:active,
+.icon-btn:hover {
+    box-shadow: var(--shadow-sm);
+}
+
 .icon-btn:active {
-  transform: scale(0.98);
+    transform: scale(0.95);
 }
 
-.theme-palette {
-  display: flex;
-  gap: 8px;
-  background: var(--card-bg);
-  padding: 6px 12px;
-  border-radius: 25px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+.icon-btn:disabled,
+.icon-btn[disabled],
+.icon-btn[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
 }
 
-.color-dot {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: transform 0.2s;
+.icon-btn--transparent {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: var(--primary);
 }
 
-.color-dot.active {
-  border-color: #f1c40f;
-  transform: scale(1.2);
+.icon-btn--danger {
+    color: #ef4444;
 }
 
-/* ---------------------------
-   Header content
----------------------------- */
-.deceased-name {
-  font-size: clamp(1.4rem, 5vw, 2rem);
-  color: var(--primary);
-  font-weight: 800;
-  margin-bottom: 5px;
-  line-height: 1.4;
-
-  /* يمنع كسر وحشي للأسماء الطويلة */
-  overflow-wrap: anywhere;
+/* ==========================================
+   Inputs
+   ========================================== */
+.input {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 15px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--card-bg); 
+    background: color-mix(in srgb, var(--card-bg) 96%, white);
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 1rem;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background-color 0.3s ease,
+        color 0.3s ease;
 }
 
-.deceased-prayer {
-  font-size: 1rem;
-  color: var(--text-sub);
-  opacity: 0.9;
+.input::placeholder {
+    color: var(--text-sub);
+    opacity: 0.9;
 }
 
-/* ---------------------------
-   Tabs scroll (Capsules)
----------------------------- */
-.tabs-scroll-container {
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  overflow-x: auto;
-  gap: 12px;
-  padding: 5px 20px 15px;
-  margin-bottom: 10px;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-behavior: smooth;
+.input:focus,
+.input:focus-visible {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 12%, transparent);
+    background: var(--card-bg);
 }
 
-.tabs-scroll-container::-webkit-scrollbar {
-  display: none;
+.input:disabled,
+.input[disabled],
+.input[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.65;
 }
 
-.tab-btn {
-  flex: 0 0 auto;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  padding: 10px 20px;
-  color: var(--text-sub);
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-  transition: all 0.25s ease;
-  white-space: nowrap;
-
-  /* Tap target الآمن */
-  min-height: 44px;
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+/* ==========================================
+   Toast
+   ========================================== */
+.app-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%) translateY(120%);
+    width: min(92vw, 420px);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+    background: color-mix(in srgb, var(--card-bg) 96%, white);
+    color: var(--text-main);
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.12),
+        0 6px 18px rgba(0, 0, 0, 0.07);
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        transform 0.26s ease,
+        opacity 0.26s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.tab-btn:hover {
-  background: var(--secondary);
+.app-toast--visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
 }
 
-.tab-btn.active {
-  background-color: var(--primary);
-  color: #FFFFFF;
-  border-color: var(--primary);
-  box-shadow: 0 4px 12px rgba(30, 111, 92, 0.3);
-  transform: translateY(-2px);
+.app-toast__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.05rem;
 }
 
-/* ---------------------------
-   Cards + content
----------------------------- */
-.card {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 25px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.04);
-  margin-bottom: 20px;
+.app-toast__body {
+    flex: 1;
+    min-width: 0;
 }
 
-.tab-content {
-  display: none;
-  animation: fadeIn 0.35s ease;
+.app-toast__label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+    opacity: 0.85;
 }
 
-.tab-content.active {
-  display: block;
+.app-toast__message {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.45;
+    word-break: break-word;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+.app-toast--success .app-toast__icon {
+    background: color-mix(in srgb, var(--primary) 14%, white);
+    color: var(--primary);
 }
 
-/* ---------------------------
-   Tasbeeh
----------------------------- */
-.dhikr-display {
-  font-family: 'Amiri', serif;
-  font-size: 2.2rem;
-  text-align: center;
-  color: var(--primary);
-  margin-bottom: 30px;
-  font-weight: bold;
+.app-toast--error .app-toast__icon {
+    background: color-mix(in srgb, #ef4444 14%, white);
+    color: #ef4444;
 }
 
-.counter-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
+.app-toast--warning .app-toast__icon {
+    background: color-mix(in srgb, #f59e0b 16%, white);
+    color: #d97706;
 }
 
-.counter-circle {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), #E9C46A);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 10px 30px rgba(30, 111, 92, 0.3);
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.1s;
-  text-align: center;
+.app-toast--info .app-toast__icon {
+    background: color-mix(in srgb, var(--accent) 16%, white);
+    color: var(--accent);
 }
 
-.counter-circle:active {
-  transform: scale(0.95);
+/* ==========================================
+   Skeleton Loading
+   ========================================== */
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--bg-color) 88%, white);
+    border-radius: 10px;
 }
 
-.count-num {
-  font-size: 4rem;
-  font-weight: 800;
-  line-height: 1;
+.skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.45),
+        transparent
+    );
+    animation: skeleton-loading 1.4s infinite;
 }
 
-/* اتجاه ثابت لعداد الدورة */
-#batchCounter {
-  direction: ltr;
-  unicode-bidi: isolate;
-  display: inline-block;
+@keyframes skeleton-loading {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
 }
 
-/* ---------------------------
-   Azkar / Duas
----------------------------- */
-.azkar-toggle {
-  display: flex;
-  background: var(--bg-color);
-  border-radius: 30px;
-  padding: 6px;
-  margin-bottom: 20px;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+.skeleton-card {
+    min-height: 80px;
+    border-radius: 14px;
 }
 
-.azkar-opt {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  background: transparent;
-  border-radius: 25px;
-  font-weight: 800;
-  font-size: 1.05rem;
-  color: var(--text-sub);
-  transition: all 0.25s ease;
-  cursor: pointer;
-  min-height: 44px;
+.skeleton-text {
+    height: 16px;
+    border-radius: 6px;
 }
 
-.azkar-opt.active {
-  background: var(--primary);
-  color: white;
-  box-shadow: 0 4px 10px rgba(30, 111, 92, 0.4);
-  transform: scale(1.02);
+.skeleton-text-lg {
+    height: 22px;
+    border-radius: 6px;
 }
 
-.zekr-item {
-  background: var(--bg-color);
-  padding: 20px;
-  border-radius: 15px;
-  border: 1px solid var(--border);
-  transition: transform 0.15s;
-  margin-bottom: 15px;
+.skeleton-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
-.zekr-item:active {
-  transform: scale(0.98);
+/* ==========================================
+   Surfaces & Generic UI Helpers
+   ========================================== */
+.surface-soft {
+    background: var(--bg-color);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
 }
 
-.zekr-text-wrap {
-  font-size: 1.4rem;
-  line-height: 1.8;
-  color: var(--text-main);
-  margin-bottom: 20px;
-  text-align: justify;
-  overflow-wrap: anywhere;
+.divider {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
 }
 
-.zekr-bottom-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid var(--border);
-  padding-top: 15px;
-  gap: 12px;
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    object-fit: cover;
+    flex-shrink: 0;
 }
 
-.zekr-count-btn {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 8px 25px;
-  border-radius: 30px;
-  font-weight: 800;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 10px rgba(30, 111, 92, 0.3);
-  cursor: pointer;
-  min-height: 44px;
+/* ==========================================
+   Utilities
+   ========================================== */
+.is-hidden {
+    display: none !important;
 }
 
-.zekr-count-btn.completed {
-  background: var(--border);
-  color: var(--text-sub);
-  box-shadow: none;
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
 }
 
-/* ---------------------------
-   General buttons
----------------------------- */
-.copy-btn {
-  background: var(--secondary);
-  border: none;
-  color: var(--primary);
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  min-height: 44px;
+.w-full {
+    width: 100%;
 }
 
-/* ---------------------------
-   Quran links
----------------------------- */
-.surah-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--secondary);
-  padding: 15px 20px;
-  border-radius: 12px;
-  text-decoration: none;
-  color: var(--text-main);
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin-bottom: 12px;
-  border: 1px solid transparent;
-  transition: 0.25s;
+.h-full {
+    height: 100%;
 }
 
-.surah-link:hover {
-  border-color: var(--primary);
-  transform: translateX(-5px);
+.mb-0 {
+    margin-bottom: 0 !important;
 }
 
-/* ---------------------------
-   Tracker
----------------------------- */
-.task-item {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  background: var(--secondary);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  border: 1px solid transparent;
-  min-height: 52px;
+.mb-8 {
+    margin-bottom: 8px !important;
 }
 
-.task-item.done {
-  background: var(--primary);
-  color: white;
-  opacity: 0.92;
+.mb-12 {
+    margin-bottom: 12px !important;
 }
 
-.task-checkbox {
-  margin-left: 15px;
-  width: 20px;
-  height: 20px;
-  accent-color: var(--primary);
-  pointer-events: none;
+.mb-15 {
+    margin-bottom: 15px !important;
 }
 
-.task-text {
-  font-size: 1.1rem;
-  font-weight: 500;
+.mb-20 {
+    margin-bottom: 20px !important;
 }
 
-/* ---------------------------
-   Names
----------------------------- */
-.name-card {
-  background: var(--secondary);
-  padding: 20px;
-  border-radius: 15px;
-  text-align: center;
-  border: 1px solid var(--border);
+.mt-15 {
+    margin-top: 15px !important;
 }
 
-.allah-name {
-  font-family: 'Amiri', serif;
-  font-size: 1.8rem;
-  color: var(--primary);
-  font-weight: bold;
-  margin-bottom: 8px;
+.mt-20 {
+    margin-top: 20px !important;
 }
 
-.allah-desc {
-  font-size: 0.9rem;
-  color: var(--text-sub);
-  line-height: 1.5;
+.mt-25 {
+    margin-top: 25px !important;
 }
 
-/* ---------------------------
-   Stories
----------------------------- */
-.story-card {
-  background: var(--secondary);
-  padding: 20px;
-  border-radius: 15px;
-  border-left: 4px solid var(--primary);
+.mt-35 {
+    margin-top: 35px !important;
 }
 
-.story-title {
-  font-size: 1.2rem;
-  color: var(--primary);
-  font-weight: bold;
-  margin-bottom: 10px;
+.p-0 {
+    padding: 0 !important;
 }
 
-.story-content {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: var(--text-main);
-  overflow-wrap: anywhere;
+.rounded-sm {
+    border-radius: var(--radius-sm) !important;
 }
 
-/* ---------------------------
-   Sadaqa card + modal
----------------------------- */
-.sadaqa-card {
-  background: linear-gradient(135deg, var(--primary), #2C3E50);
-  color: white;
-  padding: 25px;
-  border-radius: 20px;
-  text-align: center;
-  margin-bottom: 20px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+.rounded-md {
+    border-radius: var(--radius-md) !important;
 }
 
-.sadaqa-btn {
-  background: #E9C46A;
-  color: #2C3E50;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 30px;
-  font-weight: 800;
-  font-size: 1.1rem;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(233, 196, 106, 0.4);
-  min-height: 44px;
+.rounded-lg {
+    border-radius: var(--radius-lg) !important;
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  backdrop-filter: blur(5px);
-  padding: 16px;
+.border-soft {
+    border: 1px solid var(--border) !important;
 }
 
-.modal-content {
-  background: var(--card-bg);
-  width: 100%;
-  max-width: 400px;
-  padding: 30px;
-  border-radius: 20px;
-  position: relative;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-  text-align: center;
+.shadow-soft {
+    box-shadow: var(--shadow-sm) !important;
 }
 
-.close-btn {
-  position: absolute;
-  top: 15px;
-  left: 20px;
-  font-size: 1.5rem;
-  color: var(--text-sub);
-  cursor: pointer;
+.shadow-medium {
+    box-shadow: var(--shadow-md) !important;
 }
 
-.modal-input {
-  width: 100%;
-  padding: 12px 15px;
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  font-family: inherit;
-  font-size: 1rem;
-  margin-bottom: 15px;
-  text-align: center;
-  background: var(--bg-color);
-  color: var(--text-main);
+.bg-card {
+    background: var(--card-bg) !important;
 }
 
-.modal-input:focus {
-  outline: none;
-  border-color: var(--primary);
+.bg-soft {
+    background: var(--bg-color) !important;
 }
 
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
+.color-primary {
+    color: var(--primary) !important;
 }
 
-.btn-main,
-.btn-outline {
-  flex: 1;
-  padding: 12px;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 1rem;
-  min-height: 44px;
+.color-accent {
+    color: var(--accent) !important;
 }
 
-.btn-main {
-  background: var(--primary);
-  color: white;
-  border: none;
+.color-danger {
+    color: #ef4444 !important;
 }
 
-.btn-outline {
-  background: transparent;
-  color: var(--primary);
-  border: 2px solid var(--primary);
+.flex-1 {
+    flex: 1 !important;
 }
 
-/* ---------------------------
-   Ads + Footer (CLS-safe)
----------------------------- */
-.ad-container {
-  margin-bottom: 20px;
-  width: 100%;
-  min-height: 140px;
-  display: flex;
-  justify-content: center;
+.justify-start {
+    justify-content: flex-start !important;
 }
 
-.ad-box {
-  background: var(--secondary);
-  border: 2px dashed var(--border);
-  border-radius: 15px;
-  width: 100%;
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: var(--text-sub);
-  font-weight: bold;
-  font-size: 0.9rem;
-  overflow: hidden;
+.justify-center {
+    justify-content: center !important;
 }
 
-.adsbygoogle {
-  width: 100% !important;
-  display: block !important;
+.align-center {
+    align-items: center !important;
 }
 
-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-sub);
-  font-weight: 500;
+.overflow-auto {
+    overflow: auto !important;
 }
 
-/* ---------------------------
-   Motion preferences
----------------------------- */
+.overflow-y-auto {
+    overflow-y: auto !important;
+}
+
+/* ==========================================
+   Banners (Offline & Update)
+   ========================================== */
+.banner {
+    position: sticky;
+    top: 72px; /* ارتفاع الهيدر */
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.banner--warning {
+    background: #fff3cd;
+    color: #856404;
+    border-color: #ffeeba;
+}
+
+.banner--info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border-color: #bee5eb;
+}
+
+.banner .btn--small {
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    min-height: auto;
+}
+
+/* ==========================================
+   Empty States
+   ========================================== */
+.empty-state {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-sub);
+    font-size: 1rem;
+}
+
+/* ==========================================
+   Task completed state
+   ========================================== */
+.task-card.is-completed {
+    opacity: 0.7;
+    background: color-mix(in srgb, var(--card-bg) 98%, var(--primary));
+}
+
+.task-card.is-completed .task-text {
+    text-decoration: line-through;
+    color: var(--text-sub);
+}
+
+/* ==========================================
+   Silent button active state
+   ========================================== */
+.silent-active {
+    color: var(--accent);
+}
+
+/* ==========================================
+   Motion Preferences
+   ========================================== */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
-}
+    html {
+        scroll-behavior: auto;
+    }
 
-/* ---------------------------
-   Small screens refinements
----------------------------- */
-@media (max-width: 380px) {
-  main { padding: 0 14px 18px; }
-  header { padding: 18px 14px; }
-  .card { padding: 18px; }
-  .dhikr-display { font-size: 2rem; }
-  .counter-circle { width: 180px; height: 180px; }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }

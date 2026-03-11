@@ -1,122 +1,217 @@
-// v0.0.5 - GitHub Pages under /Saber/ (Production Ready - Final)
-const VERSION = 'v0.0.4';
-const SCOPE = '/Saber/';
-const CACHE_NAME = `sabry-sadaqa-${VERSION}`;
+/**
+ * ====================================================================
+ * Service Worker
+ * ====================================================================
+ * مسؤول عن:
+ * - تخزين App Shell الأساسي
+ * - دعم التشغيل بدون إنترنت
+ * - تحسين سرعة تحميل الصفحات والملفات الثابتة
+ * - تحديث الكاش تلقائياً مع كل إصدار جديد
+ */
 
-// استخدم مسارات مطلقة داخل الـ scope لتفادي مشاكل المسارات النسبية (./) وإعادة التوجيه
-const ASSETS = [
-  SCOPE,
-  `${SCOPE}index.html`,
-  `${SCOPE}css/main.css`,
-  `${SCOPE}css/themes.css`,
-  `${SCOPE}js/core.js`,
-  `${SCOPE}js/ui.js`,
-  `${SCOPE}js/pwa.js`,
-  `${SCOPE}data/azkar.js`,
-  `${SCOPE}data/duas.js`,
-  `${SCOPE}data/tasks.js`,
-  `${SCOPE}data/names.js`,
-  `${SCOPE}data/stories.js`,
-  `${SCOPE}manifest.json`,
-  `${SCOPE}icons/icon-192x192.png`,
-  `${SCOPE}icons/icon-512x512.png`,
-  `${SCOPE}icons/Preview.png` // صورة Open Graph
+const CACHE_VERSION = 'azkar-v10';
+const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
+const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
+
+const APP_SHELL_URLS = [
+    './',
+    './index.html',
+    './about.html',
+    './privacy.html',
+    './contact.html',
+    './terms.html',
+    './manifest.json',
+    './robots.txt',
+    './sitemap.xml',
+
+    './css/main.css',
+    './css/modules.css',
+    './css/themes.css',
+
+    './js/dom.js',
+    './js/config.js',
+    './js/ui-state.js',
+    './js/render-scheduler.js',
+    './js/storage.js',
+    './js/achievements.js',
+    './js/content.js',
+    './js/masbaha.js',
+    './js/tasks/tasks-core.js',
+    './js/tasks/tasks-stats.js',
+    './js/tasks/tasks-motivation.js',
+    './js/tasks/tasks-ui.js',
+    './js/tasks.js',
+    './js/quran.js',
+    './js/notifications.js',
+    './js/app.js',
+    './js/pwa.js',
+    './js/rewards.js',
+    './js/ads.js',
+
+    './data/azkar.js',
+    './data/names.js',
+    './data/messages.js',
+    './data/ayahs.json',
+
+    './assets/images/avatar.png',
+    './assets/audio/tasbeeh-click.mp3',
+
+    './icons/icon-72x72.png',
+    './icons/icon-96x96.png',
+    './icons/icon-128x128.png',
+    './icons/icon-144x144.png',
+    './icons/icon-152x152.png',
+    './icons/icon-192x192.png',
+    './icons/icon-512x512.png'
 ];
 
-// تثبيت: كاش للأصول الأساسية (مع تحمل الأخطاء عبر allSettled بدلاً من addAll)
-self.addEventListener('install', (event) => {
-  event.waitUntil((async () => {
-    const cache = await caches.open(CACHE_NAME);
-
-    await Promise.allSettled(
-      ASSETS.map((url) => cache.add(url))
-    );
-
-    await self.skipWaiting();
-  })());
-});
-
-// التفعيل: تنظيف الكاش القديم
-self.addEventListener('activate', (event) => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(
-      keys.map((key) => (key !== CACHE_NAME ? caches.delete(key) : null))
-    );
-    await self.clients.claim();
-  })());
-});
-
-// Helpers للتحقق من النطاق
-function isSameOrigin(requestUrl) {
-  return requestUrl.origin === self.location.origin;
-}
-
-function isInScope(pathname) {
-  return pathname.startsWith(SCOPE);
-}
-
-// توحيد مفتاح تخزين الـ HTML لتجنب تضخم الكاش مع الروابط المخصصة
-function getHtmlCacheKey() {
-  return new Request(`${SCOPE}index.html`);
-}
-
-// استراتيجية الجلب (Fetch Strategy)
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
-
-  // التعامل فقط مع طلبات GET
-  if (req.method !== 'GET') return;
-
-  const url = new URL(req.url);
-
-  // تجاهل أي طلب خارج الدومين أو خارج نطاق التطبيق (مثل أدسنس/خطوط جوجل) لمنع CORS ومشاكل غير متوقعة
-  if (!isSameOrigin(url) || !isInScope(url.pathname)) return;
-
-  // HTML: Network-first لضمان وصول التحديثات سريعاً
-  const accept = req.headers.get('accept') || '';
-  const isHTML = accept.includes('text/html') || url.pathname.endsWith('/') || url.pathname.endsWith('.html');
-
-  if (isHTML) {
-    event.respondWith((async () => {
-      const cache = await caches.open(CACHE_NAME);
-      const htmlKey = getHtmlCacheKey();
-
-      try {
-        const fresh = await fetch(req, { cache: 'no-store' });
-
-        // نخزن نسخة واحدة من index.html فقط بغض النظر عن query parameters
-        cache.put(htmlKey, fresh.clone());
-
-        return fresh;
-      } catch {
-        // Offline fallback
-        return (await cache.match(htmlKey)) || caches.match(`${SCOPE}index.html`);
-      }
-    })());
-    return;
-  }
-
-  // Static assets: Cache-first مع تحمل فشل الشبكة
-  event.respondWith((async () => {
-    const cached = await caches.match(req);
-    if (cached) return cached;
-
-    try {
-      const fresh = await fetch(req);
-      const cache = await caches.open(CACHE_NAME);
-      cache.put(req, fresh.clone());
-      return fresh;
-    } catch {
-      // لو الملف مش موجود في الكاش وانقطع النت، نرجع fallback لطيف
-      return caches.match(`${SCOPE}index.html`);
-    }
-  })());
-});
-
-// الاستماع لرسالة التحديث الفوري من الواجهة
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
+self.addEventListener('install', event => {
     self.skipWaiting();
-  }
+    event.waitUntil(
+        caches.open(APP_SHELL_CACHE)
+            .then(cache => cache.addAll(APP_SHELL_URLS))
+            .catch(error => {
+                console.error('[SW] install cache addAll failed:', error);
+            })
+    );
+});
+
+self.addEventListener('activate', event => {
+    const currentCaches = [APP_SHELL_CACHE, RUNTIME_CACHE];
+
+    event.waitUntil((async () => {
+        const cacheNames = await caches.keys();
+        await Promise.all(
+            cacheNames
+                .filter(cacheName => !currentCaches.includes(cacheName))
+                .map(cacheName => caches.delete(cacheName))
+        );
+        await self.clients.claim();
+    })());
+});
+
+function isCacheableResponse(response) {
+    return !!response && response.status === 200 && (response.type === 'basic' || response.type === 'cors');
+}
+
+async function cacheFirst(request) {
+    const cached = await caches.match(request);
+    if (cached) {
+        return cached;
+    }
+
+    const response = await fetch(request);
+    if (isCacheableResponse(response)) {
+        const copy = response.clone();
+        caches.open(RUNTIME_CACHE).then(cache => cache.put(request, copy));
+    }
+    return response;
+}
+
+async function staleWhileRevalidate(request) {
+    const cached = await caches.match(request);
+
+    const networkPromise = fetch(request)
+        .then(response => {
+            if (isCacheableResponse(response)) {
+                const copy = response.clone();
+                caches.open(RUNTIME_CACHE).then(cache => cache.put(request, copy));
+            }
+            return response;
+        })
+        .catch(() => null);
+
+    if (cached) {
+        return cached;
+    }
+
+    const networkResponse = await networkPromise;
+    if (networkResponse) {
+        return networkResponse;
+    }
+
+    if (request.destination === 'document') {
+        return caches.match('./index.html');
+    }
+
+    return new Response('', {
+        status: 404,
+        statusText: 'Not Found'
+    });
+}
+
+async function networkFirstForDocuments(request) {
+    try {
+        const response = await fetch(request);
+        if (isCacheableResponse(response)) {
+            const copy = response.clone();
+            caches.open(RUNTIME_CACHE).then(cache => cache.put(request, copy));
+        }
+        return response;
+    } catch (error) {
+        const cached = await caches.match(request);
+        if (cached) {
+            return cached;
+        }
+        return caches.match('./index.html');
+    }
+}
+
+self.addEventListener('fetch', event => {
+    const request = event.request;
+
+    if (request.method !== 'GET') return;
+    if (!request.url.startsWith(self.location.origin)) return;
+
+    const url = new URL(request.url);
+
+    if (request.mode === 'navigate' || request.destination === 'document') {
+        event.respondWith(networkFirstForDocuments(request));
+        return;
+    }
+
+    const isStaticAsset = [
+        'style',
+        'script',
+        'worker',
+        'image',
+        'font',
+        'audio'
+    ].includes(request.destination);
+
+    const isDataFile = url.pathname.endsWith('.json') || url.pathname.endsWith('.js');
+
+    if (isStaticAsset || isDataFile) {
+        event.respondWith(staleWhileRevalidate(request));
+        return;
+    }
+
+    event.respondWith(cacheFirst(request));
+});
+
+self.addEventListener('message', event => {
+    if (!event.data) return;
+
+    if (event.data.action === 'skipWaiting') {
+        self.skipWaiting();
+    }
+});
+
+self.addEventListener('notificationclick', event => {
+    event.notification.close();
+    const targetUrl = event.notification.data?.url || './index.html';
+
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+            for (const client of windowClients) {
+                if (client.url.includes('index.html') && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+
+            if (clients.openWindow) {
+                return clients.openWindow(targetUrl);
+            }
+        })
+    );
 });
