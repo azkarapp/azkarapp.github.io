@@ -9,53 +9,66 @@
  * - تحديث الكاش تلقائياً مع كل إصدار جديد
  */
 
-const CACHE_VERSION = 'azkar-v10';
+const CACHE_VERSION = 'azkar-v11';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
 const APP_SHELL_URLS = [
+    // 1. ملفات الجذر (Root)
     './',
     './index.html',
     './about.html',
-    './privacy.html',
     './contact.html',
+    './privacy.html',
     './terms.html',
-    './manifest.json',
     './robots.txt',
     './sitemap.xml',
+    './manifest.json',
 
+    // 2. ملفات التنسيق (CSS)
     './css/main.css',
     './css/modules.css',
     './css/themes.css',
 
-    './js/dom.js',
-    './js/config.js',
-    './js/ui-state.js',
-    './js/render-scheduler.js',
-    './js/storage.js',
-    './js/achievements.js',
-    './js/content.js',
-    './js/masbaha.js',
-    './js/tasks/tasks-core.js',
-    './js/tasks/tasks-stats.js',
-    './js/tasks/tasks-motivation.js',
-    './js/tasks/tasks-ui.js',
-    './js/tasks.js',
-    './js/quran.js',
-    './js/notifications.js',
+    // 3. ملفات الجافاسكريبت الأساسية (JS)
     './js/app.js',
+    './js/config.js',
+    './js/dom.js',
+    './js/storage.js',
+    './js/ui-state.js',
+    './js/content.js',
+    './js/notifications.js',
     './js/pwa.js',
+    './js/render-scheduler.js',
+    './js/masbaha.js',
+    './js/quran.js',
     './js/rewards.js',
+    './js/achievements.js',
     './js/ads.js',
+    './js/ads-config.js',
+    './js/firebase-core.js',
+    './js/tasks.js',
 
-    './data/azkar.js',
+    // 4. ملفات جافاسكريبت المهام (JS/Tasks)
+    './js/tasks/tasks-core.js',
+    './js/tasks/tasks-ui.js',
+    './js/tasks/tasks-motivation.js',
+    './js/tasks/tasks-stats.js',
+
+    // 5. ملفات البيانات (Data)
+    './data/quranData.js',
     './data/names.js',
+    './data/azkar.js',
     './data/messages.js',
     './data/ayahs.json',
+    './data/stories.js',
+    './data/duasData.js',
 
+    // 6. ملفات الوسائط (Assets)
     './assets/images/avatar.png',
     './assets/audio/tasbeeh-click.mp3',
 
+    // 7. الأيقونات (Icons)
     './icons/icon-72x72.png',
     './icons/icon-96x96.png',
     './icons/icon-128x128.png',
